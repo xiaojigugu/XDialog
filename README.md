@@ -1,5 +1,5 @@
 # XDialog
-
+[![](https://jitpack.io/v/com.gitee.giteeguguji/XDialog.svg)](https://jitpack.io/#com.gitee.giteeguguji/XDialog)
 #### 介绍
 简单易用的Dialog封装
 
