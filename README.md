@@ -15,8 +15,8 @@
 
 #### 使用说明
 
-Add it in your root build.gradle at the end of repositories:
-``gradle  
+Add it in your root build.gradle at the end of repositories:  
+``  
 	allprojects {
 		repositories {
 			...
@@ -25,7 +25,7 @@ Add it in your root build.gradle at the end of repositories:
 	}
 ``  
 Step 2. Add the dependency  
-``gradle
+``  
 	dependencies {
 	        implementation 'com.gitee.giteeguguji:XDialog:Tag'
 	}
