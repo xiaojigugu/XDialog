@@ -1,4 +1,4 @@
-package com.junt.dialogutils;
+package com.junt.demo;
 
 import org.junit.Test;
 
