@@ -1,14 +1,13 @@
-package com.junt.xdialog;
+package com.junt.demo;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.MotionEvent;
 import android.view.View;
 
-import com.junt.dialogutils.core.PositionDialog;
-import com.junt.dialogutils.impl.SimpleDialog;
+import com.junt.xdialog.core.BottomDialog;
+import com.junt.xdialog.core.PositionDialog;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -28,7 +27,22 @@ public class MainActivity extends AppCompatActivity {
 
     public void onTextClicked(View view) {
         System.out.println("点击了TextView");
+        showBottomDialog();
+    }
 
+    private void showBottomDialog() {
+        BottomDialog bottomDialog=new BottomDialog(this) {
+            @Override
+            protected int getImplLayoutResId() {
+                return R.layout.dialog_bottom;
+            }
+
+            @Override
+            protected void initViewContent() {
+
+            }
+        };
+        bottomDialog.show();
     }
 
     private void showPositionDialog(int x, int y) {

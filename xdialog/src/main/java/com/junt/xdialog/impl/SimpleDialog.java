@@ -1,12 +1,12 @@
-package com.junt.dialogutils.impl;
+package com.junt.xdialog.impl;
 
 import android.content.Context;
 import android.view.View;
 import android.widget.TextView;
 
-import com.junt.dialogutils.R;
-import com.junt.dialogutils.anim.XAnimator;
-import com.junt.dialogutils.core.CoreDialog;
+import com.junt.xdialog.R;
+import com.junt.xdialog.anim.XAnimator;
+import com.junt.xdialog.core.CoreDialog;
 
 import androidx.annotation.NonNull;
 

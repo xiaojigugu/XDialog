@@ -1,4 +1,4 @@
-package com.junt.dialogutils.callbacks;
+package com.junt.xdialog.callbacks;
 
 
 import android.app.Activity;

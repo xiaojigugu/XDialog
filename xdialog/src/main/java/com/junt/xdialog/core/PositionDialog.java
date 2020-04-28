@@ -1,4 +1,4 @@
-package com.junt.dialogutils.core;
+package com.junt.xdialog.core;
 
 import android.content.Context;
 import android.graphics.Rect;

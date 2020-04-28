@@ -1,4 +1,4 @@
-package com.junt.dialogutils.core;
+package com.junt.xdialog.core;
 
 import java.util.Stack;
 

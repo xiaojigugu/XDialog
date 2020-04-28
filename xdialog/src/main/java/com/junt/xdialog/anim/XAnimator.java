@@ -1,4 +1,4 @@
-package com.junt.dialogutils.anim;
+package com.junt.xdialog.anim;
 
 
 import android.view.View;

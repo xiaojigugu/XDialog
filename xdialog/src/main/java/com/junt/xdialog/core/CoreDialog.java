@@ -1,9 +1,7 @@
-package com.junt.dialogutils.core;
+package com.junt.xdialog.core;
 
 import android.app.Activity;
-import android.app.Application;
 import android.app.Dialog;
-import android.app.Fragment;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Rect;
@@ -19,10 +17,10 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 
-import com.junt.dialogutils.R;
-import com.junt.dialogutils.anim.XAnimatorScale;
-import com.junt.dialogutils.anim.XAnimator;
-import com.junt.dialogutils.callbacks.ActivityLifeCycleCallback;
+import com.junt.xdialog.R;
+import com.junt.xdialog.anim.XAnimatorScale;
+import com.junt.xdialog.anim.XAnimator;
+import com.junt.xdialog.callbacks.ActivityLifeCycleCallback;
 
 import androidx.annotation.NonNull;
 
