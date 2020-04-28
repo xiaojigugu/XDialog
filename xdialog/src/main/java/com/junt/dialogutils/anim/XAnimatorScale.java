@@ -1,0 +1,30 @@
+package com.junt.dialogutils.anim;
+
+import android.animation.ValueAnimator;
+
+public class XAnimatorScale extends XAnimator {
+
+    private ValueAnimator valueAnimatorShow;
+
+    @Override
+    protected void initAnim() {
+        getView().setScaleX(0);
+        getView().setScaleY(0);
+    }
+
+    @Override
+    public void animShow() {
+        System.out.println("start anim show"+getView().getScaleX());
+        getView().animate().scaleX(1f).scaleY(1f).setDuration(ANIM_DURATION).start();
+    }
+
+    @Override
+    public void animShowing() {
+
+    }
+
+    @Override
+    public void animDismiss() {
+        getView().animate().scaleX(0f).scaleY(0f).setDuration(ANIM_DURATION).start();
+    }
+}
