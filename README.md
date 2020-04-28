@@ -1,5 +1,5 @@
 # XDialog
-
+[![](https://jitpack.io/v/com.gitee.giteeguguji/XDialog.svg)](https://jitpack.io/#com.gitee.giteeguguji/XDialog)
 #### 介绍
 简单易用的Dialog封装
 
@@ -15,10 +15,21 @@
 
 #### 使用说明
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
-
+Add it in your root build.gradle at the end of repositories:  
+``  
+	allprojects {  
+		repositories {  
+			...  
+			maven { url 'https://jitpack.io' }
+		}  
+	}  
+``  
+Step 2. Add the dependency  
+``  
+	dependencies {  
+	        implementation 'com.gitee.giteeguguji:XDialog:v1.0'
+	}  
+``  
 #### 参与贡献
 
 1.  Fork 本仓库
