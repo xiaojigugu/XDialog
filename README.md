@@ -15,10 +15,21 @@
 
 #### 使用说明
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
-
+Add it in your root build.gradle at the end of repositories:
+``gradle
+	allprojects {
+		repositories {
+			...
+			maven { url 'https://jitpack.io' }
+		}
+	}
+``
+Step 2. Add the dependency
+``gradle
+	dependencies {
+	        implementation 'com.gitee.giteeguguji:XDialog:Tag'
+	}
+``
 #### 参与贡献
 
 1.  Fork 本仓库
