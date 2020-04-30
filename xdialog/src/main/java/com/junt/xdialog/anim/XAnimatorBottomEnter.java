@@ -1,29 +1,24 @@
 package com.junt.xdialog.anim;
 
-import android.graphics.Rect;
+import android.graphics.Point;
 
 import com.junt.xdialog.utils.ScreenUtils;
 
 public class XAnimatorBottomEnter extends XAnimator {
 
-    private Rect dialogViewVisibleRect;
-    private Rect screenRect;
+    private Point point;
 
     @Override
     protected void initAnim() {
-        dialogViewVisibleRect = new Rect();
-        getView().getGlobalVisibleRect(dialogViewVisibleRect);
-        screenRect = ScreenUtils.getScreenRect(getView().getContext());
-        int startTransY = screenRect.bottom - dialogViewVisibleRect.top;
-        System.out.printf("dialog->dialogRect:%s screenRect:%s startTransY:%d%n", dialogViewVisibleRect.toString(), screenRect.toString(), startTransY);
+        point = ScreenUtils.getScreenPoint(getView().getContext());
+        int startTransY = point.y;
         getView().setTranslationY(startTransY);
     }
 
     @Override
     public void animShow() {
-        int transY = screenRect.bottom - dialogViewVisibleRect.height();
-        System.out.println("dialog->animShow.transY" + transY);
-        getView().animate().translationY(transY).setDuration(ANIM_DURATION).start();
+        int transY =-getView().getMeasuredHeight();
+        getView().animate().translationYBy(transY).setDuration(ANIM_DURATION).start();
     }
 
     @Override
@@ -33,6 +28,6 @@ public class XAnimatorBottomEnter extends XAnimator {
 
     @Override
     public void animDismiss() {
-        getView().animate().translationY(dialogViewVisibleRect.height()).setDuration(ANIM_DURATION).start();
+        getView().animate().translationYBy(getView().getMeasuredHeight()).setDuration(ANIM_DURATION).start();
     }
 }
