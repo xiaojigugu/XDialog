@@ -25,9 +25,9 @@ import com.junt.xdialog.callbacks.ActivityLifeCycleCallback;
 import androidx.annotation.NonNull;
 
 public abstract class CoreDialog extends Dialog{
-    private final String TAG = getClass().getSimpleName();
+    protected final String TAG = getClass().getSimpleName();
     private boolean isCancelOnTouchOutSide = true;
-    private XAnimator xAnimator;
+    protected XAnimator xAnimator;
     private DialogStack dialogStack;
     private FrameLayout dialogContainer;
     private int touchSlop;
@@ -76,9 +76,10 @@ public abstract class CoreDialog extends Dialog{
             @Override
             public void run() {
                 onDialogViewAdd();
-                initViewContent();
                 if (xAnimator != null) {
                     xAnimator.bindAnimView(view);
+                    onAnimBind();
+                    xAnimator.initAnim();
                 }
             }
         });
@@ -87,15 +88,13 @@ public abstract class CoreDialog extends Dialog{
     /**
      * DialogView已添加至视图
      */
-    protected void onDialogViewAdd() {
-
-    }
+    protected abstract void onDialogViewAdd();
 
     protected abstract int getImplLayoutResId();
 
-    protected abstract void initViewContent();
+    protected abstract void onAnimBind();
 
-    private Drawable getBackgroundDrawable() {
+    protected Drawable getBackgroundDrawable() {
         return new ColorDrawable(Color.parseColor("#80000000"));
     }
 

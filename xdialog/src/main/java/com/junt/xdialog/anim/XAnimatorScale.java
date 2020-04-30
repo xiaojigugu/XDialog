@@ -7,7 +7,7 @@ public class XAnimatorScale extends XAnimator {
     private ValueAnimator valueAnimatorShow;
 
     @Override
-    protected void initAnim() {
+    public void initAnim() {
         getView().setScaleX(0);
         getView().setScaleY(0);
     }

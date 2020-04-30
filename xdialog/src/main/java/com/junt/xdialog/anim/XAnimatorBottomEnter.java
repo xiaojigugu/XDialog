@@ -9,7 +9,7 @@ public class XAnimatorBottomEnter extends XAnimator {
     private Point point;
 
     @Override
-    protected void initAnim() {
+    public void initAnim() {
         point = ScreenUtils.getScreenPoint(getView().getContext());
         int startTransY = point.y;
         getView().setTranslationY(startTransY);

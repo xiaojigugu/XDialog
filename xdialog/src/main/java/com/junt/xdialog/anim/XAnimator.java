@@ -14,14 +14,13 @@ public abstract class XAnimator {
 
     public void bindAnimView(View view){
         viewWeakReference = new WeakReference<>(view);
-        initAnim();
     }
 
     protected View getView(){
         return viewWeakReference.get();
     }
 
-    protected abstract void initAnim();
+    public abstract void initAnim();
 
     public abstract void animShow();
 

@@ -28,6 +28,11 @@ public class SimpleDialog extends CoreDialog {
         return R.layout.dialog_simple;
     }
 
+    @Override
+    protected void onAnimBind() {
+
+    }
+
     public void setText(String text) {
         this.text = text;
         if (textView != null) {
@@ -36,7 +41,7 @@ public class SimpleDialog extends CoreDialog {
     }
 
     @Override
-    protected void initViewContent() {
+    protected void onDialogViewAdd() {
         findViewById(R.id.tvConfirm).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
