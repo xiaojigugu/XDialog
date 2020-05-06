@@ -10,16 +10,16 @@ import com.junt.xdialog.core.CoreDialog;
 
 import androidx.annotation.NonNull;
 
-public class SimpleDialog extends CoreDialog {
+public class SimpleConfirmDialog extends CoreDialog {
 
     private String text;
     private TextView textView;
 
-    public SimpleDialog(@NonNull Context context) {
+    public SimpleConfirmDialog(@NonNull Context context) {
         super(context);
     }
 
-    public SimpleDialog(@NonNull Context context, XAnimator xAnimator) {
+    public SimpleConfirmDialog(@NonNull Context context, XAnimator xAnimator) {
         super(context, xAnimator);
     }
 

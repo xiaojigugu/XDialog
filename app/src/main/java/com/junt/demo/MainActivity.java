@@ -5,12 +5,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.TextView;
 
 import com.junt.xdialog.core.AttachDialog;
 import com.junt.xdialog.core.BottomDialog;
 import com.junt.xdialog.core.PositionDialog;
-import com.junt.xdialog.impl.SimpleDialog;
+import com.junt.xdialog.impl.SimpleConfirmDialog;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -36,10 +35,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     /**
      * 简易Dialog带确认按钮
      */
-    private void showSimpleDialog() {
-        SimpleDialog simpleDialog = new SimpleDialog(this);
-        simpleDialog.setText("简易的确认Dialog");
-        simpleDialog.show();
+    private void showSimpleConfirmDialog() {
+        SimpleConfirmDialog simpleConfirmDialog = new SimpleConfirmDialog(this);
+        simpleConfirmDialog.setText("简易的确认Dialog");
+        simpleConfirmDialog.show();
     }
 
     /**
@@ -94,10 +93,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     /**
      * 依附于View的Dialog
+     * AttachDialog.Direction - 指明Dialog位于View的上下左右方位
+     * AttachDialog.Align - 表明对其方式，TOP、BOTTOM（上、下边界对齐只对左右位置生效），LEFT、RIGHT（左、右边界对齐只对上下位置生效）
      */
     private void showAttachDialog() {
-        AttachDialog attachDialog = new MyAttachDialog(this);
-        attachDialog.attach(findViewById(R.id.tvAttach), AttachDialog.Direction.BOTTOM, AttachDialog.Align.RIGHT).show();
+        MyAttachDialog attachDialog = new MyAttachDialog(this);
+        attachDialog.setText("依附View的Dialog");
+        attachDialog.attach(findViewById(R.id.tvAttach), AttachDialog.Direction.LEFT, AttachDialog.Align.TOP).show();
     }
 
     @Override
@@ -107,7 +109,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 showBottomDialog();
                 break;
             case R.id.tvSimple:
-                showSimpleDialog();
+                showSimpleConfirmDialog();
                 break;
             case R.id.tvAttach:
                 showAttachDialog();

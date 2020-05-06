@@ -13,7 +13,6 @@ public class XAnimatorAttach extends XAnimator {
     private AttachDialog.Direction direction;
     private View dialogView;
 
-
     public void setDialogPosition(AttachDialog.Direction direction, View dialogView) {
         this.direction = direction;
         this.dialogView = dialogView;
@@ -23,27 +22,24 @@ public class XAnimatorAttach extends XAnimator {
     public void initAnim() {
         Rect rect = new Rect();
         dialogView.getGlobalVisibleRect(rect);
-        Log.i(TAG, "initAnim: rect-->"+rect.toString());
         switch (direction) {
             case LEFT:
-                getView().setPivotX(rect.right);
+                getView().setPivotX(rect.width());
                 getView().setScaleX(0);
                 break;
             case TOP:
-                getView().setPivotY(rect.bottom);
+                getView().setPivotY(rect.height());
                 getView().setScaleY(0);
                 break;
             case RIGHT:
-                getView().setPivotX(rect.left);
+                getView().setPivotX(0);
                 getView().setScaleX(0);
                 break;
             case BOTTOM:
-                getView().setPivotY(rect.top);
+                getView().setPivotY(0);
                 getView().setScaleY(0);
                 break;
         }
-        dialogView.getGlobalVisibleRect(rect);
-        Log.i(TAG, "initAnim: rect-->"+rect.toString());
     }
 
     @Override
