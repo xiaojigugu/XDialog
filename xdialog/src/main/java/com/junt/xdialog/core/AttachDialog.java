@@ -38,12 +38,13 @@ public abstract class AttachDialog extends PositionDialog {
 
     @Override
     protected void onDialogViewAdd() {
-        final Rect dialogViewVisibleRect = getDialogViewVisibleRect();
         if (attachView == null) {
             Log.e(TAG, getClass().getSimpleName() + ".错误:请先调用attach()");
         } else {
+            Rect dialogViewVisibleRect = getDialogViewVisibleRect();
             Rect attachViewRect = new Rect();
             attachView.getGlobalVisibleRect(attachViewRect);
+            System.out.println(getClass().getSimpleName() + ".onDialogViewAdd().attachViewRect:" + attachViewRect.toString() + ",dialogViewVisibleRect:" + dialogViewVisibleRect.toString());
             if (direction == null || align == null) {
                 handleDefaultPosition(attachViewRect, dialogViewVisibleRect);
             } else {
@@ -71,7 +72,7 @@ public abstract class AttachDialog extends PositionDialog {
                     setPosition(attachViewRect.left - dialogViewVisibleRect.width() / 2 - getExtraDP(), attachViewRect.top + dialogViewVisibleRect.height() / 2);
                 } else {
                     //其他默认下对齐
-                    setPosition(attachViewRect.left - dialogViewVisibleRect.width() / 2 - getExtraDP(), attachViewRect.bottom + dialogViewVisibleRect.height() / 2);
+                    setPosition(attachViewRect.left - dialogViewVisibleRect.width() / 2 - getExtraDP(), attachViewRect.bottom - dialogViewVisibleRect.height() / 2);
                 }
                 break;
             case TOP://上侧
@@ -89,7 +90,7 @@ public abstract class AttachDialog extends PositionDialog {
                     setPosition(attachViewRect.right + dialogViewVisibleRect.width() / 2 + getExtraDP(), attachViewRect.top + dialogViewVisibleRect.height() / 2);
                 } else {
                     //其他默认下对齐
-                    setPosition(attachViewRect.right + dialogViewVisibleRect.width() / 2 + getExtraDP(), attachViewRect.bottom + dialogViewVisibleRect.height() / 2);
+                    setPosition(attachViewRect.right + dialogViewVisibleRect.width() / 2 + getExtraDP(), attachViewRect.bottom - dialogViewVisibleRect.height() / 2);
                 }
                 break;
             case BOTTOM://下侧

@@ -2,9 +2,11 @@ package com.junt.demo;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.TextView;
 
 import com.junt.xdialog.core.AttachDialog;
 import com.junt.xdialog.core.BottomDialog;
@@ -85,21 +87,34 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             protected void onDialogViewAdd() {
                 super.onDialogViewAdd();
+                TextView textView=findViewById(R.id.textView);
+                textView.setText("任意位置Dialog");
+                findViewById(R.id.tvConfirm).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dismiss();
+                    }
+                });
             }
         };
+        positionDialog.setCanceledOnTouchOutside(false);
         positionDialog.setPosition(x, y);
         positionDialog.show();
     }
 
+    private MyAttachDialog attachDialog;
+
     /**
      * 依附于View的Dialog
      * AttachDialog.Direction - 指明Dialog位于View的上下左右方位
-     * AttachDialog.Align - 表明对其方式，TOP、BOTTOM（上、下边界对齐只对左右位置生效），LEFT、RIGHT（左、右边界对齐只对上下位置生效）
+     * AttachDialog.Align - 表明对齐方式，TOP、BOTTOM（上、下边界对齐只对左右位置生效），LEFT、RIGHT（左、右边界对齐只对上下位置生效）
      */
     private void showAttachDialog() {
-        MyAttachDialog attachDialog = new MyAttachDialog(this);
-        attachDialog.setText("依附View的Dialog");
-        attachDialog.attach(findViewById(R.id.tvAttach), AttachDialog.Direction.LEFT, AttachDialog.Align.TOP).show();
+        if (attachDialog == null) {
+            attachDialog = new MyAttachDialog(this);
+        }
+        attachDialog.setText("依附于View的Dialog(替代PopupView)");
+        attachDialog.attach(findViewById(R.id.tvAttach), AttachDialog.Direction.BOTTOM, AttachDialog.Align.RIGHT).show();
     }
 
     @Override

@@ -27,6 +27,7 @@ public abstract class PositionDialog extends CoreDialog {
     @Override
     protected void onDialogViewAdd() {
         Rect dialogViewVisibleRect = getDialogViewVisibleRect();
+        System.out.println(getClass().getSimpleName() + ",onDialogViewAdd:" + dialogViewVisibleRect.toString());
         int dialogCenterX = dialogViewVisibleRect.left + dialogViewVisibleRect.width() / 2;
         int dialogCenterY = dialogViewVisibleRect.top + dialogViewVisibleRect.height() / 2;
         getDialogView().setTranslationX(x - dialogCenterX);

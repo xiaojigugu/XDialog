@@ -9,6 +9,8 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.ContextThemeWrapper;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
@@ -24,7 +26,7 @@ import com.junt.xdialog.callbacks.ActivityLifeCycleCallback;
 
 import androidx.annotation.NonNull;
 
-public abstract class CoreDialog extends Dialog{
+public abstract class CoreDialog extends Dialog {
     protected final String TAG = getClass().getSimpleName();
     private boolean isCancelOnTouchOutSide = true;
     protected XAnimator xAnimator;
@@ -40,8 +42,8 @@ public abstract class CoreDialog extends Dialog{
         this(context, R.style.XDialog);
         this.xAnimator = xAnimator;
         dialogStack = DialogStack.getInstance();
-        if (context instanceof Activity){
-            ((Activity) context).getApplication().registerActivityLifecycleCallbacks(new ActivityLifeCycleCallback(){
+        if (context instanceof Activity) {
+            ((Activity) context).getApplication().registerActivityLifecycleCallbacks(new ActivityLifeCycleCallback() {
                 @Override
                 public void onActivityDestroyed(@NonNull Activity activity) {
                     super.onActivityDestroyed(activity);
@@ -69,7 +71,7 @@ public abstract class CoreDialog extends Dialog{
     }
 
     private void onDialogCreated() {
-        final View view = getLayoutInflater().inflate(getImplLayoutResId(), dialogContainer, false);
+        final View view = LayoutInflater.from(getContext()).inflate(getImplLayoutResId(), dialogContainer, false);
         view.setAlpha(0);
         dialogContainer.addView(view);
         runOnQueue(new Runnable() {
@@ -157,7 +159,7 @@ public abstract class CoreDialog extends Dialog{
             @Override
             public void run() {
                 if (xAnimator != null) {
-                    System.out.println("dialog->show" + Thread.currentThread().getName());
+                    System.out.println("dialog->show");
                     getDialogView().setAlpha(1);
                     xAnimator.animShow();
                 }
@@ -180,12 +182,12 @@ public abstract class CoreDialog extends Dialog{
             hide();
         }
     }
-    
-    private void delayRun(Runnable runnable, int delay) {
+
+    protected void delayRun(Runnable runnable, int delay) {
         dialogContainer.postDelayed(runnable, delay);
     }
 
-    private void runOnQueue(Runnable runnable) {
+    protected void runOnQueue(Runnable runnable) {
         getDialogView().post(runnable);
     }
 
@@ -193,19 +195,13 @@ public abstract class CoreDialog extends Dialog{
      * window透明状态栏
      */
     private void setStatusBarTrans() {
+        Window activityWindow = ((Activity) ((ContextThemeWrapper) getContext()).getBaseContext()).getWindow();
+        int systemUiVisibility = activityWindow.getDecorView().getSystemUiVisibility();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS
                     | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                        | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-            } else {
-                window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                        | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
-            }
+            window.getDecorView().setSystemUiVisibility(systemUiVisibility);
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             window.setStatusBarColor(Color.TRANSPARENT);
             window.setNavigationBarColor(Color.TRANSPARENT);

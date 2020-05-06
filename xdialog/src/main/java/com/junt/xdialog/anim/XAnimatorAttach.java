@@ -1,12 +1,9 @@
 package com.junt.xdialog.anim;
 
 import android.graphics.Rect;
-import android.util.Log;
 import android.view.View;
 
 import com.junt.xdialog.core.AttachDialog;
-
-import static android.content.ContentValues.TAG;
 
 public class XAnimatorAttach extends XAnimator {
 
