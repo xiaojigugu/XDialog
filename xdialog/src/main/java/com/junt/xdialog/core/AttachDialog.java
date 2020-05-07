@@ -44,7 +44,6 @@ public abstract class AttachDialog extends PositionDialog {
             Rect dialogViewVisibleRect = getDialogViewVisibleRect();
             Rect attachViewRect = new Rect();
             attachView.getGlobalVisibleRect(attachViewRect);
-            System.out.println(getClass().getSimpleName() + ".onDialogViewAdd().attachViewRect:" + attachViewRect.toString() + ",dialogViewVisibleRect:" + dialogViewVisibleRect.toString());
             if (direction == null || align == null) {
                 handleDefaultPosition(attachViewRect, dialogViewVisibleRect);
             } else {

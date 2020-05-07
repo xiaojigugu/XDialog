@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="300dp"
+    android:layout_height="200dp"
+    android:layout_gravity="center"
+    android:background="@drawable/shape_round_corner">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:textSize="17sp"
+        android:text="跳转时是否finish Activity？" />
+
+    <TextView
+        android:id="@+id/tvFinish"
+        android:layout_width="50dp"
+        android:layout_height="40dp"
+        android:layout_gravity="bottom|end"
+        android:gravity="center"
+        android:text="yes"
+        android:textColor="@color/colorPrimary" />
+
+    <TextView
+        android:id="@+id/tvNotFinish"
+        android:layout_width="50dp"
+        android:layout_height="40dp"
+        android:layout_gravity="bottom"
+        android:gravity="center"
+        android:text="no"
+        android:textColor="@color/colorPrimary" />
+</FrameLayout>

@@ -2,12 +2,14 @@ package com.junt.demo;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.graphics.Rect;
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
 
+import com.junt.demo.dialog.LifeCycleDialog;
+import com.junt.demo.dialog.MyAttachDialog;
 import com.junt.xdialog.core.AttachDialog;
 import com.junt.xdialog.core.BottomDialog;
 import com.junt.xdialog.core.PositionDialog;
@@ -24,6 +26,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         findViewById(R.id.tvBottom).setOnClickListener(this);
         findViewById(R.id.tvSimple).setOnClickListener(this);
         findViewById(R.id.tvAttach).setOnClickListener(this);
+        findViewById(R.id.tvJump).setOnClickListener(this);
     }
 
     @Override
@@ -49,17 +52,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void showBottomDialog() {
         BottomDialog bottomDialog = new BottomDialog(this) {
             @Override
-            protected void onDialogViewAdd() {
-
-            }
-
-            @Override
             protected int getImplLayoutResId() {
                 return R.layout.dialog_bottom;
             }
 
             @Override
-            protected void onAnimBind() {
+            protected void initDialogContent() {
 
             }
         };
@@ -80,14 +78,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
 
             @Override
-            protected void onAnimBind() {
-
-            }
-
-            @Override
-            protected void onDialogViewAdd() {
-                super.onDialogViewAdd();
-                TextView textView=findViewById(R.id.textView);
+            protected void initDialogContent() {
+                TextView textView = findViewById(R.id.textView);
                 textView.setText("任意位置Dialog");
                 findViewById(R.id.tvConfirm).setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -112,9 +104,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void showAttachDialog() {
         if (attachDialog == null) {
             attachDialog = new MyAttachDialog(this);
+            attachDialog.setText("依附于View的Dialog(替代PopupView)");
+            attachDialog.attach(findViewById(R.id.tvAttach), AttachDialog.Direction.BOTTOM, AttachDialog.Align.RIGHT);
         }
-        attachDialog.setText("依附于View的Dialog(替代PopupView)");
-        attachDialog.attach(findViewById(R.id.tvAttach), AttachDialog.Direction.BOTTOM, AttachDialog.Align.RIGHT).show();
+        attachDialog.show();
+    }
+
+    /**
+     * 展示跳转Dialog
+     * Activity finish时自动销毁Dialog
+     */
+    private void showLifeCycleDialog() {
+        LifeCycleDialog lifeCycleDialog = new LifeCycleDialog(this);
+        lifeCycleDialog.show();
     }
 
     @Override
@@ -129,7 +131,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.tvAttach:
                 showAttachDialog();
                 break;
+            case R.id.tvJump:
+                showLifeCycleDialog();
+                break;
         }
-
     }
 }

@@ -1,8 +1,9 @@
-package com.junt.demo;
+package com.junt.demo.dialog;
 
 import android.content.Context;
 import android.widget.TextView;
 
+import com.junt.demo.R;
 import com.junt.xdialog.core.AttachDialog;
 
 import androidx.annotation.NonNull;
@@ -16,15 +17,14 @@ public class MyAttachDialog extends AttachDialog {
     }
 
     @Override
-    protected int getImplLayoutResId() {
-        return R.layout.dialog_attach;
+    protected void initDialogContent() {
+        textView = findViewById(R.id.textView);
+        textView.setText(text);
     }
 
     @Override
-    protected void onDialogViewAdd() {
-        super.onDialogViewAdd();
-        textView = findViewById(R.id.textView);
-        textView.setText(text);
+    protected int getImplLayoutResId() {
+        return R.layout.dialog_attach;
     }
 
     public void setText(String text) {

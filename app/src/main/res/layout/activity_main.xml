@@ -49,4 +49,18 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvJump"
+        android:layout_width="100dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="10dp"
+        android:background="#BA6464"
+        android:gravity="center"
+        android:text="跳转Activity"
+        android:textColor="#ffffff"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </LinearLayout>

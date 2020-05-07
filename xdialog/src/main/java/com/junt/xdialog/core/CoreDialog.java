@@ -3,6 +3,7 @@ package com.junt.xdialog.core;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
@@ -43,11 +44,14 @@ public abstract class CoreDialog extends Dialog {
         this.xAnimator = xAnimator;
         dialogStack = DialogStack.getInstance();
         if (context instanceof Activity) {
+            setOwnerActivity((Activity) context);
             ((Activity) context).getApplication().registerActivityLifecycleCallbacks(new ActivityLifeCycleCallback() {
                 @Override
                 public void onActivityDestroyed(@NonNull Activity activity) {
                     super.onActivityDestroyed(activity);
-                    dismiss();
+                    if (activity == getOwnerActivity()) {
+                        CoreDialog.super.dismiss();
+                    }
                 }
             });
         }
@@ -65,21 +69,26 @@ public abstract class CoreDialog extends Dialog {
         touchSlop = ViewConfiguration.get(getContext()).getScaledTouchSlop();
         dialogContainer = (FrameLayout) getLayoutInflater().inflate(R.layout.dialog_container, (ViewGroup) getWindow().getDecorView(), false);
         dialogContainer.setBackground(getBackgroundDrawable());
-        ViewGroup.LayoutParams params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        addContentView(dialogContainer, params);
-        onDialogCreated();
-    }
 
-    private void onDialogCreated() {
         final View view = LayoutInflater.from(getContext()).inflate(getImplLayoutResId(), dialogContainer, false);
         view.setAlpha(0);
         dialogContainer.addView(view);
+
+        ViewGroup.LayoutParams params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        setContentView(dialogContainer, params);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        initDialogContent();
         runOnQueue(new Runnable() {
             @Override
             public void run() {
+                System.out.println("dialog.onStart");
                 onDialogViewAdd();
                 if (xAnimator != null) {
-                    xAnimator.bindAnimView(view);
+                    xAnimator.bindAnimView(getDialogView(),getRealContext());
                     onAnimBind();
                     xAnimator.initAnim();
                 }
@@ -88,14 +97,29 @@ public abstract class CoreDialog extends Dialog {
     }
 
     /**
-     * DialogView已添加至视图
+     * @return Dialog的布局id
      */
-    protected abstract void onDialogViewAdd();
-
     protected abstract int getImplLayoutResId();
 
-    protected abstract void onAnimBind();
+    /**
+     * 初始化dialogView的内容
+     */
+    protected abstract void initDialogContent();
+    /**
+     * DialogView已添加至视图并且初始化完成
+     */
 
+    protected void onDialogViewAdd(){};
+
+    /**
+     * XAnimator已经绑定目标DialogView但还未调用initAnim()
+     */
+    protected void onAnimBind() {
+    }
+
+    /**
+     * @return Dialog的根布局背景色
+     */
     protected Drawable getBackgroundDrawable() {
         return new ColorDrawable(Color.parseColor("#80000000"));
     }
@@ -104,6 +128,9 @@ public abstract class CoreDialog extends Dialog {
         return dialogContainer.getChildAt(0);
     }
 
+    /**
+     * @return DialogView在屏幕上的可见区域
+     */
     protected Rect getDialogViewVisibleRect() {
         Rect rect = new Rect();
         getDialogView().getGlobalVisibleRect(rect);
@@ -141,6 +168,12 @@ public abstract class CoreDialog extends Dialog {
 
     private Rect rect = new Rect();
 
+    /**
+     * 该事件坐标是否处于DialogView内容区域之外
+     *
+     * @param event 触摸事件
+     * @return true-处于DialogView内容区域之外 false-处于DialogView内容区域之内
+     */
     private boolean isTouchOutSide(MotionEvent event) {
         View dialogView = dialogContainer.getChildAt(0);
         dialogView.getGlobalVisibleRect(rect);
@@ -151,6 +184,18 @@ public abstract class CoreDialog extends Dialog {
         }
     }
 
+    /**
+     * 传递过来的Context会被包装成ContextThemeWrapper，调用getContext()无法获取传递过来的真实context
+     *
+     * @return 真实的Context
+     */
+    protected Context getRealContext() {
+        return ((ContextWrapper) getContext()).getBaseContext();
+    }
+
+    /**
+     * 显示Dialog
+     */
     @Override
     public void show() {
         super.show();
@@ -159,7 +204,7 @@ public abstract class CoreDialog extends Dialog {
             @Override
             public void run() {
                 if (xAnimator != null) {
-                    System.out.println("dialog->show");
+                    System.out.println("dialog.show");
                     getDialogView().setAlpha(1);
                     xAnimator.animShow();
                 }
@@ -167,8 +212,14 @@ public abstract class CoreDialog extends Dialog {
         });
     }
 
+    /**
+     * dismiss Dialog
+     * 实例化成功以后仅调用hide()方法来进行隐藏，避免多次调用onCreate()
+     * 只有在Activity destroy时才会调用真实的dismiss方法
+     */
     @Override
     public void dismiss() {
+        System.out.println("dialog.dismiss");
         dialogStack.removeDialog(this);
         if (xAnimator != null) {
             xAnimator.animDismiss();
@@ -183,32 +234,44 @@ public abstract class CoreDialog extends Dialog {
         }
     }
 
+    /**
+     * 延迟执行
+     *
+     * @param runnable 需要执行的runnable
+     * @param delay    延迟时间 ms
+     */
     protected void delayRun(Runnable runnable, int delay) {
         dialogContainer.postDelayed(runnable, delay);
     }
 
+    /**
+     * 执行队列
+     *
+     * @param runnable cunnable
+     */
     protected void runOnQueue(Runnable runnable) {
         getDialogView().post(runnable);
     }
 
     /**
-     * window透明状态栏
+     * 同步window的状态栏，与Activity的window一致
      */
     private void setStatusBarTrans() {
-        Window activityWindow = ((Activity) ((ContextThemeWrapper) getContext()).getBaseContext()).getWindow();
-        int systemUiVisibility = activityWindow.getDecorView().getSystemUiVisibility();
+        Window activityWindow = ((Activity) getRealContext()).getWindow();
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS
                     | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-            window.getDecorView().setSystemUiVisibility(systemUiVisibility);
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.setStatusBarColor(Color.TRANSPARENT);
-            window.setNavigationBarColor(Color.TRANSPARENT);
+
+            window.getDecorView().setSystemUiVisibility(activityWindow.getDecorView().getSystemUiVisibility());
+
+            window.addFlags(window.getAttributes().flags);
+            window.setStatusBarColor(activityWindow.getStatusBarColor());
+            window.setNavigationBarColor(activityWindow.getNavigationBarColor());
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             Window window = getWindow();
-            window.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
-                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            window.setFlags(window.getAttributes().flags, window.getAttributes().flags);
         }
     }
 }

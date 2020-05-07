@@ -14,7 +14,6 @@ public class XAnimatorScale extends XAnimator {
 
     @Override
     public void animShow() {
-        System.out.println("start anim show"+getView().getScaleX());
         getView().animate().scaleX(1f).scaleY(1f).setDuration(ANIM_DURATION).start();
     }
 
