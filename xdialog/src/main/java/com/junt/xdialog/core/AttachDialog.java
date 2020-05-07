@@ -9,7 +9,10 @@ import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.view.View;
 
+import com.junt.xdialog.anim.XAnimator;
 import com.junt.xdialog.anim.XAnimatorAttach;
+import com.junt.xdialog.callbacks.XDialogLifeCallBack;
+import com.junt.xdialog.callbacks.XDialogLifeCallbackImpl;
 import com.junt.xdialog.utils.ScreenUtils;
 
 import androidx.annotation.NonNull;
@@ -55,9 +58,14 @@ public abstract class AttachDialog extends PositionDialog {
     }
 
     @Override
-    protected void onAnimBind() {
-        //摆放完成后初始化Animator
-        ((XAnimatorAttach) xAnimator).setDialogPosition(direction, getDialogView());
+    protected XDialogLifeCallBack getXDialogCallBack() {
+        return new XDialogLifeCallbackImpl(){
+            @Override
+            public void onAnimatorBindDialogView(XAnimator xAnimator) {
+                //摆放完成后初始化Animator
+                ((XAnimatorAttach) xAnimator).setDialogPosition(direction, getDialogView());
+            }
+        };
     }
 
     /**

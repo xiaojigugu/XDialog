@@ -10,7 +10,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -24,6 +23,7 @@ import com.junt.xdialog.R;
 import com.junt.xdialog.anim.XAnimatorScale;
 import com.junt.xdialog.anim.XAnimator;
 import com.junt.xdialog.callbacks.ActivityLifeCycleCallback;
+import com.junt.xdialog.callbacks.XDialogLifeCallBack;
 
 import androidx.annotation.NonNull;
 
@@ -51,9 +51,15 @@ public abstract class CoreDialog extends Dialog {
                     super.onActivityDestroyed(activity);
                     if (activity == getOwnerActivity()) {
                         CoreDialog.super.dismiss();
+                        if (getXDialogCallBack()!=null){
+                            getXDialogCallBack().onDismiss();
+                        }
                     }
                 }
             });
+        }
+        if (getXDialogCallBack() != null) {
+            getXDialogCallBack().onCreateInstance(this);
         }
     }
 
@@ -76,21 +82,33 @@ public abstract class CoreDialog extends Dialog {
 
         ViewGroup.LayoutParams params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         setContentView(dialogContainer, params);
+        if (getXDialogCallBack() != null) {
+            getXDialogCallBack().onCreate();
+        }
     }
 
     @Override
     protected void onStart() {
         super.onStart();
         initDialogContent();
+        if (getXDialogCallBack() != null) {
+            getXDialogCallBack().onContentReady(getDialogView());
+        }
         runOnQueue(new Runnable() {
             @Override
             public void run() {
                 System.out.println("dialog.onStart");
                 onDialogViewAdd();
                 if (xAnimator != null) {
-                    xAnimator.bindAnimView(getDialogView(),getRealContext());
+                    xAnimator.bindAnimView(getDialogView(), getRealContext());
                     onAnimBind();
+                    if (getXDialogCallBack() != null) {
+                        getXDialogCallBack().onAnimatorBindDialogView(xAnimator);
+                    }
                     xAnimator.initAnim();
+                    if (getXDialogCallBack() != null) {
+                        getXDialogCallBack().onAnimInitialized(xAnimator);
+                    }
                 }
             }
         });
@@ -105,11 +123,21 @@ public abstract class CoreDialog extends Dialog {
      * 初始化dialogView的内容
      */
     protected abstract void initDialogContent();
+
+
+    /**
+     * 获取Callback实例
+     */
+    protected XDialogLifeCallBack getXDialogCallBack(){
+        return null;
+    };
+
     /**
      * DialogView已添加至视图并且初始化完成
      */
 
-    protected void onDialogViewAdd(){};
+    protected void onDialogViewAdd() {
+    }
 
     /**
      * XAnimator已经绑定目标DialogView但还未调用initAnim()
@@ -207,6 +235,14 @@ public abstract class CoreDialog extends Dialog {
                     System.out.println("dialog.show");
                     getDialogView().setAlpha(1);
                     xAnimator.animShow();
+                    if (getXDialogCallBack() != null) {
+                        delayRun(new Runnable() {
+                            @Override
+                            public void run() {
+                                getXDialogCallBack().onShow();
+                            }
+                        }, xAnimator.ANIM_DURATION);
+                    }
                 }
             }
         });
@@ -227,10 +263,41 @@ public abstract class CoreDialog extends Dialog {
                 @Override
                 public void run() {
                     hide();
+                    if (getXDialogCallBack()!=null){
+                        getXDialogCallBack().onHide();
+                    }
                 }
             }, xAnimator.ANIM_DURATION);
         } else {
             hide();
+            if (getXDialogCallBack()!=null){
+                getXDialogCallBack().onHide();
+            }
+        }
+    }
+
+    /**
+     * dismiss Dialog
+     * 实例化成功以后仅调用hide()方法来进行隐藏，避免多次调用onCreate()
+     * dialog隐藏后执行runnable
+     *
+     * @param runnable 需要执行的runnable
+     */
+    public void dismissAndRun(final Runnable runnable) {
+        System.out.println("dialog.dismiss");
+        dialogStack.removeDialog(this);
+        if (xAnimator != null) {
+            xAnimator.animDismiss();
+            delayRun(new Runnable() {
+                @Override
+                public void run() {
+                    hide();
+                    runnable.run();
+                }
+            }, xAnimator.ANIM_DURATION);
+        } else {
+            hide();
+            runnable.run();
         }
     }
 

@@ -42,11 +42,6 @@ public class SimpleConfirmDialog extends CoreDialog {
         textView.setText(text);
     }
 
-    @Override
-    protected void onAnimBind() {
-
-    }
-
     public void setText(String text) {
         this.text = text;
         if (textView != null) {
