@@ -25,9 +25,9 @@ public abstract class PositionDialog extends XCoreDialog {
     }
 
     @Override
-    protected void onDialogViewAdd() {
+    protected void onDialogViewCreated() {
         Rect dialogViewVisibleRect = getDialogViewVisibleRect();
-        System.out.println(getClass().getSimpleName() + ",onDialogViewAdd:" + dialogViewVisibleRect.toString());
+        System.out.println(getClass().getSimpleName() + ",onDialogViewCreated:" + dialogViewVisibleRect.toString());
         int dialogCenterX = dialogViewVisibleRect.left + dialogViewVisibleRect.width() / 2;
         int dialogCenterY = dialogViewVisibleRect.top + dialogViewVisibleRect.height() / 2;
         getDialogView().setTranslationX(x - dialogCenterX);

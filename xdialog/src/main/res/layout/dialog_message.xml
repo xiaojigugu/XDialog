@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/tvMsg"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:background="@drawable/shape_round_corner"
+    android:lineSpacingExtra="3dp"
+    android:maxWidth="250dp"
+    android:minHeight="40dp"
+    android:orientation="vertical"
+    android:padding="10dp"
+    tools:text="这是一条短消息~" />

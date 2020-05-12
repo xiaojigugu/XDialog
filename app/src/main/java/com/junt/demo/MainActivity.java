@@ -2,7 +2,6 @@ package com.junt.demo;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.AlertDialog;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
@@ -13,8 +12,9 @@ import com.junt.demo.dialog.MyAttachDialog;
 import com.junt.xdialog.core.AttachDialog;
 import com.junt.xdialog.core.BottomDialog;
 import com.junt.xdialog.core.PositionDialog;
-import com.junt.xdialog.impl.SimpleConfirmDialog;
-import com.junt.xdialog.impl.SimpleLoadingDialog;
+import com.junt.xdialog.impl.XConfirmDialog;
+import com.junt.xdialog.impl.XLoadingDialog;
+import com.junt.xdialog.impl.XMessage;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -60,18 +60,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return super.onTouchEvent(event);
     }
 
+    /**
+     * 显示LoadingDialog，
+     */
     private void showLoadingDialog() {
-        SimpleLoadingDialog loadingDialog = new SimpleLoadingDialog(this);
+        XLoadingDialog loadingDialog = new XLoadingDialog(this);
         loadingDialog.show();
+        loadingDialog.delayDismissAndRun(3000, new Runnable() {
+            @Override
+            public void run() {
+                XMessage.makeText(MainActivity.this, "加载成功!", XMessage.Duration.LENGTH_SHORT).show();
+            }
+        });
     }
 
     /**
      * 简易Dialog带确认按钮
      */
     private void showSimpleConfirmDialog() {
-        SimpleConfirmDialog simpleConfirmDialog = new SimpleConfirmDialog(this);
-        simpleConfirmDialog.setText("简易的确认Dialog");
-        simpleConfirmDialog.show();
+        XConfirmDialog xConfirmDialog = new XConfirmDialog(this);
+        xConfirmDialog.setText("简易的确认Dialog");
+        xConfirmDialog.show();
     }
 
     /**

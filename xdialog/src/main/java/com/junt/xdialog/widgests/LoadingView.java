@@ -21,11 +21,12 @@ public class LoadingView extends View {
 
     private int backColor = Color.parseColor("#33000000");
     private int foreColor = Color.BLACK;
+    private ArgbEvaluator argbEvaluator;
     int lineCount = 12; // 共12条线
     private final float stepAngle = 360f / lineCount;
     int realLineCount = 12;
-    int time = 0; // 重复次数
     float centerX, centerY; // 中心x，y
+    private int time = 1;//转动次数
 
     public LoadingView(Context context) {
         this(context, null);
@@ -40,18 +41,19 @@ public class LoadingView extends View {
         paint = new Paint(Paint.ANTI_ALIAS_FLAG);
         paint.setStrokeCap(Paint.Cap.ROUND);
         paint.setColor(backColor);
+        argbEvaluator = new ArgbEvaluator();
     }
 
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
         radius = Math.min(w, h) / 2f;
-        radiusOffset = radius / 2.5f;
+        radiusOffset = radius / 2f;
 
         centerX = getMeasuredWidth() / 2f;
         centerY = getMeasuredHeight() / 2f;
 
-        stokeWidth = getMeasuredWidth() * 2f / ScreenUtils.dp2px(getContext(), 30);
+        stokeWidth = getMeasuredWidth() * 2f / ScreenUtils.dp2px(getContext(), 10);
         paint.setStrokeWidth(stokeWidth);
     }
 
@@ -69,10 +71,10 @@ public class LoadingView extends View {
                     , paint);
         }
 
-        paint.setColor(foreColor);
-        for (int i = realLineCount; i > 0; i--) {
-            double x = Math.cos(Math.toRadians(stepAngle * i));
-            double y = Math.sin(Math.toRadians(stepAngle * i));
+        for (int i = 0; i < realLineCount; i++) {
+            paint.setColor((Integer) argbEvaluator.evaluate(1.0f / 12 * i, foreColor, backColor));
+            double x = Math.cos(Math.toRadians((time + i) * stepAngle));
+            double y = Math.sin(Math.toRadians((time + i) * stepAngle));
             canvas.drawLine(
                     centerX + (float) x * radiusOffset
                     , centerY + (float) y * radiusOffset
@@ -80,18 +82,14 @@ public class LoadingView extends View {
                     centerY + (float) y * radius
                     , paint);
         }
-        postDelayed(rotateTask, 2000);
+        postDelayed(rotateTask, 80);
     }
 
     private Runnable rotateTask = new Runnable() {
         @Override
         public void run() {
-            if (realLineCount > 0) {
-                realLineCount--;
-            } else {
-                realLineCount = lineCount;
-            }
-            invalidate();
+            time++;
+            postInvalidate();
         }
     };
 

@@ -58,7 +58,8 @@ public abstract class XCoreDialog extends Dialog {
                 public void onActivityDestroyed(@NonNull Activity activity) {
                     super.onActivityDestroyed(activity);
                     if (activity == getOwnerActivity()) {
-                        XCoreDialog.super.dismiss();
+                        destroy();
+                        onDestroy();
                         if (getXDialogCallBack() != null) {
                             getXDialogCallBack().onDismiss();
                         }
@@ -98,6 +99,7 @@ public abstract class XCoreDialog extends Dialog {
         final View view = LayoutInflater.from(getContext()).inflate(getImplLayoutResId(), dialogContainer, false);
         view.setAlpha(0);
         dialogContainer.addView(view);
+        onDialogViewAdded();
 
         ViewGroup.LayoutParams params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         setContentView(dialogContainer, params);
@@ -117,7 +119,7 @@ public abstract class XCoreDialog extends Dialog {
             @Override
             public void run() {
                 System.out.println(TAG + ".onStart");
-                onDialogViewAdd();
+                onDialogViewCreated();
                 if (xAnimator != null) {
                     xAnimator.bindAnimView(getDialogView(), getRealContext(), XCoreDialog.this);
                     onAnimBind();
@@ -144,7 +146,6 @@ public abstract class XCoreDialog extends Dialog {
      */
     protected abstract void initDialogContent();
 
-
     /**
      * 获取Callback实例
      */
@@ -153,10 +154,24 @@ public abstract class XCoreDialog extends Dialog {
     }
 
     /**
-     * DialogView已添加至视图并且初始化完成
+     * DialogView已添加至根容器内
      */
+    protected void onDialogViewAdded() {
+    }
 
-    protected void onDialogViewAdd() {
+    /**
+     * DialogView已添加至视图并且初始化完成（可以获取宽高）
+     */
+    protected void onDialogViewCreated() {
+    }
+
+    protected void onShow() {
+    }
+
+    protected void onDismiss() {
+    }
+
+    protected void onDestroy() {
     }
 
     /**
@@ -278,18 +293,20 @@ public abstract class XCoreDialog extends Dialog {
         runOnQueue(new Runnable() {
             @Override
             public void run() {
+                getDialogView().setAlpha(1f);
                 if (xAnimator != null) {
-                    System.out.println(TAG + ".show");
-                    getDialogView().setAlpha(1);
                     xAnimator.animShow();
-                    if (getXDialogCallBack() != null) {
-                        delayRun(new Runnable() {
-                            @Override
-                            public void run() {
+                    delayRun(new Runnable() {
+                        @Override
+                        public void run() {
+                            onShow();
+                            if (getXDialogCallBack() != null) {
                                 getXDialogCallBack().onShow();
                             }
-                        }, xAnimator.ANIM_DURATION);
-                    }
+                        }
+                    }, xAnimator.ANIM_DURATION);
+                } else {
+                    onShow();
                 }
             }
         });
@@ -302,7 +319,7 @@ public abstract class XCoreDialog extends Dialog {
      */
     @Override
     public void dismiss() {
-        if (!isReady) {
+        if (xAnimator != null && !isReady) {
             Log.e(TAG, TAG + " is not ready");
             return;
         }
@@ -314,6 +331,7 @@ public abstract class XCoreDialog extends Dialog {
                 @Override
                 public void run() {
                     hide();
+                    onDismiss();
                     if (getXDialogCallBack() != null) {
                         getXDialogCallBack().onDismiss();
                     }
@@ -321,6 +339,7 @@ public abstract class XCoreDialog extends Dialog {
             }, xAnimator.ANIM_DURATION);
         } else {
             hide();
+            onDismiss();
             if (getXDialogCallBack() != null) {
                 getXDialogCallBack().onDismiss();
             }
@@ -328,27 +347,54 @@ public abstract class XCoreDialog extends Dialog {
     }
 
     /**
+     * 走正常的dismiss方法，下次使用会重新创建View
+     */
+    protected void destroy() {
+        XCoreDialog.super.dismiss();
+    }
+
+    /**
      * dismiss Dialog
-     * 实例化成功以后仅调用hide()方法来进行隐藏，避免多次调用onCreate()
      * dialog隐藏后执行runnable
      *
      * @param runnable 需要执行的runnable
      */
     public void dismissAndRun(final Runnable runnable) {
-        System.out.println("dialog.dismiss");
-        dialogStack.removeDialog(this);
+        dismiss();
         if (xAnimator != null) {
-            xAnimator.animDismiss();
-            delayRun(new Runnable() {
-                @Override
-                public void run() {
-                    hide();
-                    runnable.run();
-                }
-            }, xAnimator.ANIM_DURATION);
+            delayRun(runnable, xAnimator.ANIM_DURATION);
         } else {
-            hide();
-            runnable.run();
+            delayRun(runnable, 0);
+        }
+    }
+
+    /**
+     * 延时dismiss
+     *
+     * @param delay 延时时间
+     */
+    public void delayDismiss(int delay) {
+        delayRun(new Runnable() {
+            @Override
+            public void run() {
+                dismiss();
+            }
+        }, delay);
+    }
+
+    /**
+     * 延时dismiss Dialog
+     * dialog隐藏后执行runnable
+     *
+     * @param delay    延时时间
+     * @param runnable 需要执行的runnable
+     */
+    public void delayDismissAndRun(int delay, final Runnable runnable) {
+        delayDismiss(delay);
+        if (xAnimator != null) {
+            delayRun(runnable, xAnimator.ANIM_DURATION + delay);
+        } else {
+            delayRun(runnable, delay);
         }
     }
 

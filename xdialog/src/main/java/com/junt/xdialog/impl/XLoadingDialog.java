@@ -10,15 +10,16 @@ import com.junt.xdialog.core.XCoreDialog;
 
 import androidx.annotation.NonNull;
 
-public class SimpleLoadingDialog extends XCoreDialog {
+public class XLoadingDialog extends XCoreDialog {
     private String text;
     private TextView textView;
 
-    public SimpleLoadingDialog(@NonNull Context context) {
+    public XLoadingDialog(@NonNull Context context) {
         super(context);
+        setCanceledOnTouchOutside(false);
     }
 
-    public SimpleLoadingDialog(@NonNull Context context, XAnimator xAnimator) {
+    public XLoadingDialog(@NonNull Context context, XAnimator xAnimator) {
         super(context, xAnimator);
     }
 
@@ -39,6 +40,4 @@ public class SimpleLoadingDialog extends XCoreDialog {
             textView.setText(TextUtils.isDigitsOnly(text) ? "正在加载..." : text);
         }
     }
-
-
 }

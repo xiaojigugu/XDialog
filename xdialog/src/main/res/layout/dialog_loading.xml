@@ -5,14 +5,15 @@
     android:layout_height="wrap_content"
     android:layout_gravity="center"
     android:background="@drawable/shape_round_corner"
-    android:gravity="center_horizontal"
+    android:gravity="center"
+    android:minWidth="100dp"
+    android:minHeight="100dp"
     android:orientation="vertical"
     android:padding="10dp">
 
     <com.junt.xdialog.widgests.LoadingView
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        />
+        android:layout_width="30dp"
+        android:layout_height="30dp" />
 
     <TextView
         android:id="@+id/tvText"

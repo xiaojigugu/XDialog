@@ -40,7 +40,7 @@ public abstract class AttachDialog extends PositionDialog {
     }
 
     @Override
-    protected void onDialogViewAdd() {
+    protected void onDialogViewCreated() {
         if (attachView == null) {
             Log.e(TAG, getClass().getSimpleName() + ".错误:请先调用attach()");
         } else {
@@ -53,7 +53,7 @@ public abstract class AttachDialog extends PositionDialog {
                 handleCustomPosition(attachViewRect, dialogViewVisibleRect);
             }
             //调用父类PositionDialog方法进行摆放
-            AttachDialog.super.onDialogViewAdd();
+            AttachDialog.super.onDialogViewCreated();
         }
     }
 
