@@ -7,7 +7,7 @@ import com.junt.xdialog.anim.XAnimator;
 
 import androidx.annotation.NonNull;
 
-public abstract class PositionDialog extends CoreDialog {
+public abstract class PositionDialog extends XCoreDialog {
 
     private int x, y;
 

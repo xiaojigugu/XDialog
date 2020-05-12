@@ -3,13 +3,13 @@ package com.junt.xdialog.callbacks;
 import android.view.View;
 
 import com.junt.xdialog.anim.XAnimator;
-import com.junt.xdialog.core.CoreDialog;
+import com.junt.xdialog.core.XCoreDialog;
 
 public interface XDialogLifeCallBack {
     /**
      * CoreDialog实例创建完成
      */
-    void onCreateInstance(CoreDialog coreDialog);
+    void onCreateInstance(XCoreDialog XCoreDialog);
 
     /**
      * Dialog创建完成，View已经添加进window
@@ -45,4 +45,9 @@ public interface XDialogLifeCallBack {
      * Dialog完全销毁
      */
     void onDismiss();
+
+    /**
+     * 触摸了外部区域
+     */
+    void onTouchOutside();
 }

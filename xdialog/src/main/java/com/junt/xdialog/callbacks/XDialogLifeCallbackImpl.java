@@ -3,11 +3,11 @@ package com.junt.xdialog.callbacks;
 import android.view.View;
 
 import com.junt.xdialog.anim.XAnimator;
-import com.junt.xdialog.core.CoreDialog;
+import com.junt.xdialog.core.XCoreDialog;
 
 public class XDialogLifeCallbackImpl implements XDialogLifeCallBack {
     @Override
-    public void onCreateInstance(CoreDialog coreDialog) {
+    public void onCreateInstance(XCoreDialog XCoreDialog) {
 
     }
 
@@ -43,6 +43,11 @@ public class XDialogLifeCallbackImpl implements XDialogLifeCallBack {
 
     @Override
     public void onDismiss() {
+
+    }
+
+    @Override
+    public void onTouchOutside() {
 
     }
 }

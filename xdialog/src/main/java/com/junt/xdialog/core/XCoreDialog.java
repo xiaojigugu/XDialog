@@ -10,6 +10,8 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.InputDevice;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -25,21 +27,27 @@ import com.junt.xdialog.anim.XAnimator;
 import com.junt.xdialog.callbacks.ActivityLifeCycleCallback;
 import com.junt.xdialog.callbacks.XDialogLifeCallBack;
 
+import java.util.Stack;
+
 import androidx.annotation.NonNull;
 
-public abstract class CoreDialog extends Dialog {
+public abstract class XCoreDialog extends Dialog {
     protected final String TAG = getClass().getSimpleName();
     private boolean isCancelOnTouchOutSide = true;
     protected XAnimator xAnimator;
     private DialogStack dialogStack;
-    private FrameLayout dialogContainer;
-    private int touchSlop;
+    private DialogContainerLayout dialogContainer;
+    protected int touchSlop;
+    /**
+     * DialogView是否已经完成初始化（包含动画得绑定及初始化）
+     */
+    protected boolean isReady = false;
 
-    public CoreDialog(@NonNull Context context) {
+    public XCoreDialog(@NonNull Context context) {
         this(context, new XAnimatorScale());
     }
 
-    public CoreDialog(@NonNull Context context, XAnimator xAnimator) {
+    public XCoreDialog(@NonNull Context context, XAnimator xAnimator) {
         this(context, R.style.XDialog);
         this.xAnimator = xAnimator;
         dialogStack = DialogStack.getInstance();
@@ -50,8 +58,8 @@ public abstract class CoreDialog extends Dialog {
                 public void onActivityDestroyed(@NonNull Activity activity) {
                     super.onActivityDestroyed(activity);
                     if (activity == getOwnerActivity()) {
-                        CoreDialog.super.dismiss();
-                        if (getXDialogCallBack()!=null){
+                        XCoreDialog.super.dismiss();
+                        if (getXDialogCallBack() != null) {
                             getXDialogCallBack().onDismiss();
                         }
                     }
@@ -63,17 +71,28 @@ public abstract class CoreDialog extends Dialog {
         }
     }
 
-    public CoreDialog(@NonNull Context context, int themeResId) {
+    public XCoreDialog(@NonNull Context context, int themeResId) {
         super(context, themeResId);
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        System.out.println("dialog.onCreate");
+        System.out.println(TAG + ".onCreate");
         setStatusBarTrans();
         touchSlop = ViewConfiguration.get(getContext()).getScaledTouchSlop();
-        dialogContainer = (FrameLayout) getLayoutInflater().inflate(R.layout.dialog_container, (ViewGroup) getWindow().getDecorView(), false);
+        dialogContainer = (DialogContainerLayout) getLayoutInflater().inflate(R.layout.dialog_container, (ViewGroup) getWindow().getDecorView(), false);
+        dialogContainer.setTouchCallBack(new DialogContainerLayout.TouchCallBack() {
+            @Override
+            public boolean onInterceptTouchEvent(MotionEvent ev) {
+                return XCoreDialog.this.onContainerInterceptTouchEvent(ev);
+            }
+
+            @Override
+            public boolean onTouchEvent(MotionEvent ev) {
+                return XCoreDialog.this.onContainerTouchEvent(ev);
+            }
+        });
         dialogContainer.setBackground(getBackgroundDrawable());
 
         final View view = LayoutInflater.from(getContext()).inflate(getImplLayoutResId(), dialogContainer, false);
@@ -97,15 +116,16 @@ public abstract class CoreDialog extends Dialog {
         runOnQueue(new Runnable() {
             @Override
             public void run() {
-                System.out.println("dialog.onStart");
+                System.out.println(TAG + ".onStart");
                 onDialogViewAdd();
                 if (xAnimator != null) {
-                    xAnimator.bindAnimView(getDialogView(), getRealContext());
+                    xAnimator.bindAnimView(getDialogView(), getRealContext(), XCoreDialog.this);
                     onAnimBind();
                     if (getXDialogCallBack() != null) {
                         getXDialogCallBack().onAnimatorBindDialogView(xAnimator);
                     }
                     xAnimator.initAnim();
+                    isReady = true;
                     if (getXDialogCallBack() != null) {
                         getXDialogCallBack().onAnimInitialized(xAnimator);
                     }
@@ -128,9 +148,9 @@ public abstract class CoreDialog extends Dialog {
     /**
      * 获取Callback实例
      */
-    protected XDialogLifeCallBack getXDialogCallBack(){
+    public XDialogLifeCallBack getXDialogCallBack() {
         return null;
-    };
+    }
 
     /**
      * DialogView已添加至视图并且初始化完成
@@ -152,6 +172,9 @@ public abstract class CoreDialog extends Dialog {
         return new ColorDrawable(Color.parseColor("#80000000"));
     }
 
+    /**
+     * 获取DialogView
+     */
     protected View getDialogView() {
         return dialogContainer.getChildAt(0);
     }
@@ -194,22 +217,46 @@ public abstract class CoreDialog extends Dialog {
         return super.onTouchEvent(event);
     }
 
+    /**
+     * Dialog容器拦截事件
+     */
+    public boolean onContainerInterceptTouchEvent(@NonNull MotionEvent ev) {
+        return false;
+    }
+
+    /**
+     * Dialog容器消费事件
+     */
+    public boolean onContainerTouchEvent(@NonNull MotionEvent ev){
+        return false;
+    }
+
     private Rect rect = new Rect();
 
     /**
-     * 该事件坐标是否处于DialogView内容区域之外
+     * 该事件坐标是否处于所有已经实例化的DialogView内容区域之外
      *
      * @param event 触摸事件
      * @return true-处于DialogView内容区域之外 false-处于DialogView内容区域之内
      */
     private boolean isTouchOutSide(MotionEvent event) {
-        View dialogView = dialogContainer.getChildAt(0);
-        dialogView.getGlobalVisibleRect(rect);
-        if (rect.contains((int) event.getRawX(), (int) event.getRawY())) {
-            return false;
-        } else {
-            return true;
+        Stack<XCoreDialog> xCoreDialogStack = DialogStack.getInstance().getXCoreDialogStack();
+        boolean isTouchOutside = true;
+        for (XCoreDialog xCoreDialog : xCoreDialogStack) {
+            if (xCoreDialog.getRealContext() != getRealContext()) {
+                continue;
+            }
+            View dialogView = xCoreDialog.getDialogView();
+            dialogView.getGlobalVisibleRect(rect);
+            if (rect.contains((int) event.getRawX(), (int) event.getRawY())) {
+                isTouchOutside = false;
+                break;
+            }
         }
+        if (isTouchOutside && getXDialogCallBack() != null) {
+            getXDialogCallBack().onTouchOutside();
+        }
+        return isTouchOutside;
     }
 
     /**
@@ -232,7 +279,7 @@ public abstract class CoreDialog extends Dialog {
             @Override
             public void run() {
                 if (xAnimator != null) {
-                    System.out.println("dialog.show");
+                    System.out.println(TAG + ".show");
                     getDialogView().setAlpha(1);
                     xAnimator.animShow();
                     if (getXDialogCallBack() != null) {
@@ -255,7 +302,11 @@ public abstract class CoreDialog extends Dialog {
      */
     @Override
     public void dismiss() {
-        System.out.println("dialog.dismiss");
+        if (!isReady) {
+            Log.e(TAG, TAG + " is not ready");
+            return;
+        }
+        System.out.println(TAG + ".dismiss");
         dialogStack.removeDialog(this);
         if (xAnimator != null) {
             xAnimator.animDismiss();
@@ -263,14 +314,14 @@ public abstract class CoreDialog extends Dialog {
                 @Override
                 public void run() {
                     hide();
-                    if (getXDialogCallBack()!=null){
+                    if (getXDialogCallBack() != null) {
                         getXDialogCallBack().onHide();
                     }
                 }
             }, xAnimator.ANIM_DURATION);
         } else {
             hide();
-            if (getXDialogCallBack()!=null){
+            if (getXDialogCallBack() != null) {
                 getXDialogCallBack().onHide();
             }
         }
@@ -318,6 +369,14 @@ public abstract class CoreDialog extends Dialog {
      */
     protected void runOnQueue(Runnable runnable) {
         getDialogView().post(runnable);
+    }
+
+
+    /**
+     * 根布局（DecorView）Padding
+     */
+    protected void paddingRoot(int left, int top, int right, int bottom) {
+        getWindow().getDecorView().setPadding(left, top, right, bottom);
     }
 
     /**

@@ -1,17 +1,16 @@
 package com.junt.xdialog.impl;
 
 import android.content.Context;
-import android.graphics.Rect;
 import android.view.View;
 import android.widget.TextView;
 
 import com.junt.xdialog.R;
 import com.junt.xdialog.anim.XAnimator;
-import com.junt.xdialog.core.CoreDialog;
+import com.junt.xdialog.core.XCoreDialog;
 
 import androidx.annotation.NonNull;
 
-public class SimpleConfirmDialog extends CoreDialog {
+public class SimpleConfirmDialog extends XCoreDialog {
 
     private String text;
     private TextView textView;

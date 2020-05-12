@@ -58,7 +58,7 @@ public abstract class AttachDialog extends PositionDialog {
     }
 
     @Override
-    protected XDialogLifeCallBack getXDialogCallBack() {
+    public XDialogLifeCallBack getXDialogCallBack() {
         return new XDialogLifeCallbackImpl(){
             @Override
             public void onAnimatorBindDialogView(XAnimator xAnimator) {

@@ -7,14 +7,14 @@ import android.view.View;
 
 import com.junt.demo.Main2Activity;
 import com.junt.demo.R;
-import com.junt.xdialog.core.CoreDialog;
+import com.junt.xdialog.core.XCoreDialog;
 
 import androidx.annotation.NonNull;
 
 /**
  * 用于测试Activity onDestroy时Dialog自动dismiss
  */
-public class LifeCycleDialog extends CoreDialog {
+public class LifeCycleDialog extends XCoreDialog {
 
     public LifeCycleDialog(@NonNull Context context) {
         super(context);

@@ -5,7 +5,7 @@ import java.util.Stack;
 public class DialogStack {
     private static DialogStack dialogStack;
 
-    private Stack<CoreDialog> coreDialogStackImpl;
+    private Stack<XCoreDialog> xCoreDialogStackImpl;
 
     public static DialogStack getInstance() {
         if (dialogStack==null){
@@ -15,22 +15,26 @@ public class DialogStack {
     }
 
     private DialogStack() {
-        coreDialogStackImpl=new Stack<>();
+        xCoreDialogStackImpl =new Stack<>();
     }
 
-    public void addDialog(CoreDialog coreDialog) {
-        coreDialogStackImpl.add(coreDialog);
+    public void addDialog(XCoreDialog XCoreDialog) {
+        xCoreDialogStackImpl.add(XCoreDialog);
     }
 
-    public void removeDialog(CoreDialog coreDialog) {
-        coreDialogStackImpl.remove(coreDialog);
+    public void removeDialog(XCoreDialog XCoreDialog) {
+        xCoreDialogStackImpl.remove(XCoreDialog);
     }
 
-    public CoreDialog getTopDialog(){
-        return coreDialogStackImpl.peek();
+    public XCoreDialog getTopDialog(){
+        return xCoreDialogStackImpl.peek();
     }
 
-    public CoreDialog getBottomDialog(){
-        return coreDialogStackImpl.get(0);
+    public XCoreDialog getBottomDialog(){
+        return xCoreDialogStackImpl.get(0);
+    }
+
+    public Stack<XCoreDialog> getXCoreDialogStack(){
+        return xCoreDialogStackImpl;
     }
 }

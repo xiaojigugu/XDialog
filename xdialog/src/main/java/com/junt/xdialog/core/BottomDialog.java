@@ -6,7 +6,7 @@ import com.junt.xdialog.anim.XAnimatorBottomEnter;
 
 import androidx.annotation.NonNull;
 
-public abstract class BottomDialog extends CoreDialog {
+public abstract class BottomDialog extends XCoreDialog {
 
     public BottomDialog(@NonNull Context context) {
         this(context,new XAnimatorBottomEnter());
