@@ -105,13 +105,12 @@ public class BottomDialogManager {
         }
 
         @Override
-        protected Drawable getBackgroundDrawable() {
+        public Drawable getBackgroundDrawable() {
             return new ColorDrawable(Color.TRANSPARENT);
         }
 
         @Override
         public boolean onContainerInterceptTouchEvent(@NonNull MotionEvent ev) {
-            System.out.println(getClass().getSimpleName() + "onContainerInterceptTouchEvent.action:" + ev.getAction());
             boolean isIntercept = false;
             switch (ev.getAction()) {
                 case MotionEvent.ACTION_DOWN:
@@ -136,10 +135,10 @@ public class BottomDialogManager {
 
         @Override
         public boolean onTouchEvent(@NonNull MotionEvent event) {
-            System.out.println(getClass().getSimpleName() + ".onTouchEvent.action:" + event.getAction());
             switch (event.getAction()) {
                 case MotionEvent.ACTION_MOVE:
-                    getDialogView().setTranslationY(firstDialogAnimator.getCurrentTransY() + (event.getY() - downY));
+                    if (getScrollTag(event) == ScrollTag.UP || getScrollTag(event) == ScrollTag.DOWN)
+                        getDialogView().setTranslationY(firstDialogAnimator.getCurrentTransY() + (event.getY() - downY));
                     break;
                 case MotionEvent.ACTION_UP:
                 case MotionEvent.ACTION_CANCEL:
@@ -236,7 +235,7 @@ public class BottomDialogManager {
         }
 
         @Override
-        protected Drawable getBackgroundDrawable() {
+        public Drawable getBackgroundDrawable() {
             return new ColorDrawable(Color.TRANSPARENT);
         }
 
@@ -326,7 +325,6 @@ public class BottomDialogManager {
      * NestedScrollView是否还能向上滚动
      */
     public boolean isScrollToBottom(ViewGroup nestedScrollView) {
-        System.out.println("isScrollToBottom:" + !nestedScrollView.canScrollVertically(1));
         return !nestedScrollView.canScrollVertically(1);
     }
 
@@ -334,7 +332,6 @@ public class BottomDialogManager {
      * NestedScrollView是否滑动至顶部
      */
     public boolean isScrollToTop(View nestedScrollView) {
-        System.out.println("isScrollToTop:" + !nestedScrollView.canScrollVertically(-1));
         return !nestedScrollView.canScrollVertically(-1);
     }
 
@@ -350,7 +347,7 @@ public class BottomDialogManager {
             float moveX = Math.abs(x - downX);
             moveX = moveX == 0 ? 1 : moveX;
             double acos = Math.acos(moveX / distance);
-            if (Math.PI / 2 - acos < Math.toRadians(20)) {
+            if (acos > Math.toRadians(30)) {
                 //垂直滑动
                 if (y > downY) {
                     //向下滑动

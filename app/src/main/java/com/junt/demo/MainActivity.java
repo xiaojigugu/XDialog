@@ -14,6 +14,7 @@ import com.junt.xdialog.core.AttachDialog;
 import com.junt.xdialog.core.BottomDialog;
 import com.junt.xdialog.core.PositionDialog;
 import com.junt.xdialog.impl.SimpleConfirmDialog;
+import com.junt.xdialog.impl.SimpleLoadingDialog;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -26,7 +27,29 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         findViewById(R.id.tvBottom).setOnClickListener(this);
         findViewById(R.id.tvSimple).setOnClickListener(this);
         findViewById(R.id.tvAttach).setOnClickListener(this);
+        findViewById(R.id.tvLoading).setOnClickListener(this);
         findViewById(R.id.tvJump).setOnClickListener(this);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.tvBottom:
+                showBottomDialog();
+                break;
+            case R.id.tvSimple:
+                showSimpleConfirmDialog();
+                break;
+            case R.id.tvAttach:
+                showAttachDialog();
+                break;
+            case R.id.tvLoading:
+                showLoadingDialog();
+                break;
+            case R.id.tvJump:
+                showLifeCycleDialog();
+                break;
+        }
     }
 
     @Override
@@ -35,6 +58,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             showPositionDialog((int) event.getRawX(), (int) event.getRawY());
         }
         return super.onTouchEvent(event);
+    }
+
+    private void showLoadingDialog() {
+        SimpleLoadingDialog loadingDialog = new SimpleLoadingDialog(this);
+        loadingDialog.show();
     }
 
     /**
@@ -119,21 +147,5 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         lifeCycleDialog.show();
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.tvBottom:
-                showBottomDialog();
-                break;
-            case R.id.tvSimple:
-                showSimpleConfirmDialog();
-                break;
-            case R.id.tvAttach:
-                showAttachDialog();
-                break;
-            case R.id.tvJump:
-                showLifeCycleDialog();
-                break;
-        }
-    }
+
 }

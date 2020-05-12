@@ -168,14 +168,14 @@ public abstract class XCoreDialog extends Dialog {
     /**
      * @return Dialog的根布局背景色
      */
-    protected Drawable getBackgroundDrawable() {
+    public Drawable getBackgroundDrawable() {
         return new ColorDrawable(Color.parseColor("#80000000"));
     }
 
     /**
      * 获取DialogView
      */
-    protected View getDialogView() {
+    public View getDialogView() {
         return dialogContainer.getChildAt(0);
     }
 
@@ -227,7 +227,7 @@ public abstract class XCoreDialog extends Dialog {
     /**
      * Dialog容器消费事件
      */
-    public boolean onContainerTouchEvent(@NonNull MotionEvent ev){
+    public boolean onContainerTouchEvent(@NonNull MotionEvent ev) {
         return false;
     }
 
@@ -315,14 +315,14 @@ public abstract class XCoreDialog extends Dialog {
                 public void run() {
                     hide();
                     if (getXDialogCallBack() != null) {
-                        getXDialogCallBack().onHide();
+                        getXDialogCallBack().onDismiss();
                     }
                 }
             }, xAnimator.ANIM_DURATION);
         } else {
             hide();
             if (getXDialogCallBack() != null) {
-                getXDialogCallBack().onHide();
+                getXDialogCallBack().onDismiss();
             }
         }
     }

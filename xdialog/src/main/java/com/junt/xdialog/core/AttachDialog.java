@@ -135,7 +135,7 @@ public abstract class AttachDialog extends PositionDialog {
     }
 
     @Override
-    protected Drawable getBackgroundDrawable() {
+    public Drawable getBackgroundDrawable() {
         return new ColorDrawable(Color.TRANSPARENT);
     }
 

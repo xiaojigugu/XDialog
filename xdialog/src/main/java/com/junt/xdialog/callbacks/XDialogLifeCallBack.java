@@ -39,12 +39,12 @@ public interface XDialogLifeCallBack {
     /**
      * Dialog隐藏动画执行完毕，Dialog完全隐藏
      */
-    void onHide();
+    void onDismiss();
 
     /**
      * Dialog完全销毁
      */
-    void onDismiss();
+    void onDestroy();
 
     /**
      * 触摸了外部区域

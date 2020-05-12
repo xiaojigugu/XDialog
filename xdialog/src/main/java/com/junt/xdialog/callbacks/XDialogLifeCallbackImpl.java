@@ -37,7 +37,7 @@ public class XDialogLifeCallbackImpl implements XDialogLifeCallBack {
     }
 
     @Override
-    public void onHide() {
+    public void onDestroy() {
 
     }
 
