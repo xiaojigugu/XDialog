@@ -53,23 +53,29 @@ public abstract class XCoreDialog extends Dialog {
         dialogStack = DialogStack.getInstance();
         if (context instanceof Activity) {
             setOwnerActivity((Activity) context);
-            ((Activity) context).getApplication().registerActivityLifecycleCallbacks(new ActivityLifeCycleCallback() {
-                @Override
-                public void onActivityDestroyed(@NonNull Activity activity) {
-                    super.onActivityDestroyed(activity);
-                    if (activity == getOwnerActivity()) {
-                        destroy();
-                        onDestroy();
-                        if (getXDialogCallBack() != null) {
-                            getXDialogCallBack().onDismiss();
-                        }
-                    }
-                }
-            });
+            if (!getClass().getSimpleName().equals("XMessage")) {
+                registerActivityLifeCallBack((Activity) context);
+            }
         }
         if (getXDialogCallBack() != null) {
             getXDialogCallBack().onCreateInstance(this);
         }
+    }
+
+    private void registerActivityLifeCallBack(@NonNull Activity context) {
+        context.getApplication().registerActivityLifecycleCallbacks(new ActivityLifeCycleCallback() {
+            @Override
+            public void onActivityDestroyed(@NonNull Activity activity) {
+                super.onActivityDestroyed(activity);
+                if (activity == getOwnerActivity()) {
+                    destroy();
+                    onDestroy();
+                    if (getXDialogCallBack() != null) {
+                        getXDialogCallBack().onDismiss();
+                    }
+                }
+            }
+        });
     }
 
     public XCoreDialog(@NonNull Context context, int themeResId) {

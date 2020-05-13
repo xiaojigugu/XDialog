@@ -2,6 +2,7 @@ package com.junt.demo;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.graphics.Point;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
@@ -15,6 +16,9 @@ import com.junt.xdialog.core.PositionDialog;
 import com.junt.xdialog.impl.XConfirmDialog;
 import com.junt.xdialog.impl.XLoadingDialog;
 import com.junt.xdialog.impl.XMessage;
+import com.junt.xdialog.utils.ScreenUtils;
+
+import java.util.Random;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -28,6 +32,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         findViewById(R.id.tvSimple).setOnClickListener(this);
         findViewById(R.id.tvAttach).setOnClickListener(this);
         findViewById(R.id.tvLoading).setOnClickListener(this);
+        findViewById(R.id.tvMsg).setOnClickListener(this);
+        findViewById(R.id.tvMsgRandomLoc).setOnClickListener(this);
         findViewById(R.id.tvJump).setOnClickListener(this);
     }
 
@@ -46,11 +52,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.tvLoading:
                 showLoadingDialog();
                 break;
+            case R.id.tvMsg:
+                showMsgDialog("标准吐司");
+                findViewById(R.id.tvMsg).postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        showMsgDialog("第二个标准吐司");
+                    }
+                }, 1000);
+                break;
+            case R.id.tvMsgRandomLoc:
+                showRandomMsgDialog(10, 200);
+                showRandomMsgDialog(50, 400);
+                showRandomMsgDialog(100, 600);
+                break;
             case R.id.tvJump:
                 showLifeCycleDialog();
                 break;
         }
     }
+
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
@@ -59,6 +80,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         return super.onTouchEvent(event);
     }
+
+    /**
+     * 任意位置吐司Dialog
+     */
+    private void showRandomMsgDialog(int left, int top) {
+        XMessage.makeText(this, "任意位置吐司", XMessage.Duration.LENGTH_SHORT, left, top).show();
+    }
+
+    private XMessage xMessage;
+
+    /**
+     * 标准吐司Dialog
+     */
+    private void showMsgDialog(String msg) {
+        if (xMessage != null) {
+            xMessage.cancel();
+        }
+        xMessage = XMessage.makeText(this, msg, XMessage.Duration.LENGTH_SHORT);
+        xMessage.show();
+    }
+
 
     /**
      * 显示LoadingDialog，

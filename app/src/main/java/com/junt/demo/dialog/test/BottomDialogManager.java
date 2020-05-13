@@ -137,7 +137,7 @@ public class BottomDialogManager {
         public boolean onTouchEvent(@NonNull MotionEvent event) {
             switch (event.getAction()) {
                 case MotionEvent.ACTION_MOVE:
-                    if (getScrollTag(event) == ScrollTag.UP || getScrollTag(event) == ScrollTag.DOWN)
+                    if (!(getScrollTag(event) == ScrollTag.UP && firstDialogAnimator.getCurrentTransY() == 0))
                         getDialogView().setTranslationY(firstDialogAnimator.getCurrentTransY() + (event.getY() - downY));
                     break;
                 case MotionEvent.ACTION_UP:
@@ -270,7 +270,8 @@ public class BottomDialogManager {
             System.out.println(getClass().getSimpleName() + ".onTouchEvent.action:" + event.getAction());
             switch (event.getAction()) {
                 case MotionEvent.ACTION_MOVE:
-                    getDialogView().setTranslationY(secondDialogAnimator.getCurrentTransY() + (event.getY() - downY));
+                    if (!(getScrollTag(event) == ScrollTag.UP && secondDialogAnimator.getCurrentTransY() == 0))
+                        getDialogView().setTranslationY(secondDialogAnimator.getCurrentTransY() + (event.getY() - downY));
                     break;
                 case MotionEvent.ACTION_UP:
                 case MotionEvent.ACTION_CANCEL:
