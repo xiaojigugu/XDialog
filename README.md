@@ -1,6 +1,6 @@
 # XDialog
 [![](https://jitpack.io/v/com.gitee.giteeguguji/XDialog.svg)](https://jitpack.io/#com.gitee.giteeguguji/XDialog)
-#### 介绍 
+#### 介绍
 简单易用的Dialog封装类-XDialog  
 <img src="https://gitee.com/giteeguguji/XDialog/raw/master/app/src/main/images/sample.gif" width="30%" height="30%">
 
@@ -29,7 +29,7 @@ Step 2. Add the dependency
 	        implementation 'com.gitee.giteeguguji:XDialog:v1.0'  
 	}  
 ```  
-#### 使用  
+#### 使用
 #####  自定义Dialog  
 1. 编写layout布局文件
 ```xml
@@ -64,6 +64,7 @@ Step 2. Add the dependency
         android:textColor="#03A9F4" />
 </FrameLayout>
 ```  
+
 2. 自定义Dialog类
 ```java
 public class XConfirmDialog extends XCoreDialog {
@@ -119,7 +120,8 @@ public class XConfirmDialog extends XCoreDialog {
         }
     }
 }
-```  
+```
+
 3. 使用Dialog
 <pre><code class="java">
   private void showSimpleConfirmDialog() {
@@ -128,7 +130,7 @@ public class XConfirmDialog extends XCoreDialog {
         xConfirmDialog.show();
     }
 </code></pre>
-<img src="https://images.gitee.com/uploads/images/2020/0514/154647_366c4b4d_5240134.png" height="30%" width="30%">  
+<img src="https://gitee.com/giteeguguji/XDialog/raw/master/app/src/main/images/simple.png" height="30%" width="30%">
 
 4. 自定义动画  
 这里以内部默认的缩放动画为例
@@ -174,6 +176,7 @@ XConfirmDialog xConfirmDialog = new XConfirmDialog(MainActivity.this,new XAnimat
 xConfirmDialog.setText(&quot;简易的确认Dialog&quot;);
 xConfirmDialog.show();
 </code></pre>
+
 5. 设置背景色
 背景色默认为有透明度的灰色阴影,若需要需改，可在自定义的Dialog类中复写以下方法：
 <pre><code class="java">
@@ -183,6 +186,7 @@ xConfirmDialog.show();
         return new ColorDrawable(Color.TRANSPARENT);
     }
 </code></pre>
+
 6. 事件监听
 监听Dialog的生命周期，复写以下方法：
 <pre>
@@ -253,6 +257,7 @@ xConfirmDialog.show();
 <pre><code class="java">
 positionDialog.setCanceledOnTouchOutside(false);
 </code></pre>
+
 8. 事件分发 
 * 对Dialog的根布局Layout进行事件处理可以复写以下方法
 <pre><code class="java">
