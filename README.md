@@ -121,13 +121,13 @@ public class XConfirmDialog extends XCoreDialog {
 }
 ```  
 3. 使用Dialog
-```java
-    private void showSimpleConfirmDialog() {
+<pre><code class="java">
+  private void showSimpleConfirmDialog() {
         XConfirmDialog xConfirmDialog = new XConfirmDialog(MainActivity.this);
-        xConfirmDialog.setText("简易的确认Dialog");
+        xConfirmDialog.setText(&quot;简易的确认Dialog&quot;);
         xConfirmDialog.show();
     }
-```  
+</code></pre>
 <img src="https://images.gitee.com/uploads/images/2020/0514/154647_366c4b4d_5240134.png" height="30%" width="30%">  
 
 4. 自定义动画  
@@ -166,25 +166,27 @@ public class XAnimatorScale extends XAnimator {
     public void animDismiss() {
         getView().animate().scaleX(0f).scaleY(0f).setDuration(ANIM_DURATION).start();
     }
-}  
-
+}
+```
+<pre><code class="java">
 //使用缩放动画
 XConfirmDialog xConfirmDialog = new XConfirmDialog(MainActivity.this,new XAnimatorScale());
-xConfirmDialog.setText("简易的确认Dialog");
+xConfirmDialog.setText(&quot;简易的确认Dialog&quot;);
 xConfirmDialog.show();
-```  
+</code></pre>
 5. 设置背景色
 背景色默认为有透明度的灰色阴影,若需要需改，可在自定义的Dialog类中复写以下方法：
-```java
-    @Override
+<pre><code class="java">
+  @Override
     public Drawable getBackgroundDrawable() {
         //这里将背景色修改为透明背景
         return new ColorDrawable(Color.TRANSPARENT);
     }
-```  
+</code></pre>
 6. 事件监听
 监听Dialog的生命周期，复写以下方法：
-```java  
+<pre>
+<code class="java">
     @Override
     public XDialogLifeCallBack getXDialogCallBack() {
         return new XDialogLifeCallbackImpl(){
@@ -244,15 +246,16 @@ xConfirmDialog.show();
             }
         };
     }
-```
+</code>
+</pre>
 
 7. 点击外部区域是否dismiss，调用原Dialog的方法即可
-```java
+<pre><code class="java">
 positionDialog.setCanceledOnTouchOutside(false);
-```  
+</code></pre>
 8. 事件分发 
 * 对Dialog的根布局Layout进行事件处理可以复写以下方法
-```java
+<pre><code class="java">
         /**
          * 重写该方法进行事件拦截，拦截后会进入onContainerTouchEvent
          * 外部拦截时请注意不要拦截down，up事件，否则子View将收不到任何点击事件
@@ -287,13 +290,13 @@ positionDialog.setCanceledOnTouchOutside(false);
         public boolean onTouchEvent(@NonNull MotionEvent event) {
             return super.onTouchEvent(event);
         }
-```  
+</code></pre>
 * 事件穿透  
 如果需要在点击Dialog外部区域时底层的界面能够响应触摸事件，则做如下处理：
-```java
+<pre><code class="java">
     @Override
     public boolean onTouchEvent(@NonNull MotionEvent event) {
         ((Activity) getRealContext()).dispatchTouchEvent(event);
         return false;
     }
-```
+</code></pre>
