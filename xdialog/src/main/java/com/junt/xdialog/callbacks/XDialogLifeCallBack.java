@@ -1,5 +1,6 @@
 package com.junt.xdialog.callbacks;
 
+import android.view.MotionEvent;
 import android.view.View;
 
 import com.junt.xdialog.anim.XAnimator;
@@ -48,6 +49,7 @@ public interface XDialogLifeCallBack {
 
     /**
      * 触摸了外部区域
+     * @param event
      */
-    void onTouchOutside();
+    void onTouchOutside(MotionEvent event);
 }

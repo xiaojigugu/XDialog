@@ -71,7 +71,7 @@ public abstract class XCoreDialog extends Dialog {
                     destroy();
                     onDestroy();
                     if (getXDialogCallBack() != null) {
-                        getXDialogCallBack().onDismiss();
+                        getXDialogCallBack().onDestroy();
                     }
                 }
             }
@@ -190,7 +190,8 @@ public abstract class XCoreDialog extends Dialog {
     /**
      * XAnimator已经绑定目标DialogView并且已经调用initAnim()
      */
-    protected void onAnimInitialized(){}
+    protected void onAnimInitialized() {
+    }
 
     /**
      * @return Dialog的根布局背景色
@@ -281,7 +282,7 @@ public abstract class XCoreDialog extends Dialog {
             }
         }
         if (isTouchOutside && getXDialogCallBack() != null) {
-            getXDialogCallBack().onTouchOutside();
+            getXDialogCallBack().onTouchOutside(event);
         }
         return isTouchOutside;
     }

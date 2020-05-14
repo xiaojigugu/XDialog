@@ -1,5 +1,6 @@
 package com.junt.xdialog.callbacks;
 
+import android.view.MotionEvent;
 import android.view.View;
 
 import com.junt.xdialog.anim.XAnimator;
@@ -47,7 +48,7 @@ public class XDialogLifeCallbackImpl implements XDialogLifeCallBack {
     }
 
     @Override
-    public void onTouchOutside() {
+    public void onTouchOutside(MotionEvent event) {
 
     }
 }

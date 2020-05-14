@@ -304,8 +304,8 @@ public class BottomDialogManager {
         public XDialogLifeCallBack getXDialogCallBack() {
             return new XDialogLifeCallbackImpl() {
                 @Override
-                public void onTouchOutside() {
-                    super.onTouchOutside();
+                public void onTouchOutside(MotionEvent event) {
+                    super.onTouchOutside(event);
                     backToFirstDialog();
                 }
             };
