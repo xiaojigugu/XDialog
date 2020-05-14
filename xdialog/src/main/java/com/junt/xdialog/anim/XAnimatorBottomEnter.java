@@ -16,11 +16,13 @@ public class XAnimatorBottomEnter extends XAnimator {
         //屏幕高-dialogView的Top-导航栏高度（如果导航栏可见）
         int startTransY = point.y - rect.top - (ScreenUtils.isNavBarVisible(getContext()) ? ScreenUtils.getNavBarHeight() : 0);
         getView().setTranslationY(startTransY);
+        saveTranslation(startTransY);
     }
 
     @Override
     public void animShow() {
         int transY = -getView().getMeasuredHeight();
+        saveTranslation(getCurrentTransY() + transY);
         getView().animate().translationYBy(transY).setDuration(ANIM_DURATION).start();
     }
 
@@ -31,6 +33,7 @@ public class XAnimatorBottomEnter extends XAnimator {
 
     @Override
     public void animDismiss() {
+        saveTranslation(getCurrentTransY() + getView().getMeasuredHeight());
         getView().animate().translationYBy(getView().getMeasuredHeight()).setDuration(ANIM_DURATION).start();
     }
 }

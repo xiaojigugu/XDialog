@@ -133,6 +133,7 @@ public abstract class XCoreDialog extends Dialog {
                         getXDialogCallBack().onAnimatorBindDialogView(xAnimator);
                     }
                     xAnimator.initAnim();
+                    onAnimInitialized();
                     isReady = true;
                     if (getXDialogCallBack() != null) {
                         getXDialogCallBack().onAnimInitialized(xAnimator);
@@ -185,6 +186,11 @@ public abstract class XCoreDialog extends Dialog {
      */
     protected void onAnimBind() {
     }
+
+    /**
+     * XAnimator已经绑定目标DialogView并且已经调用initAnim()
+     */
+    protected void onAnimInitialized(){}
 
     /**
      * @return Dialog的根布局背景色

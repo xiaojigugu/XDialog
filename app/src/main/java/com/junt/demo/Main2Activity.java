@@ -25,15 +25,15 @@ public class Main2Activity extends AppCompatActivity {
         bottomDialogManager.showFirst();
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        XMessage.makeText(Main2Activity.this, "跨Activity吐司", XMessage.Duration.LENGTH_LONG).show(true);
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                finish();
-            }
-        }, 2000);
-    }
+//    @Override
+//    protected void onStart() {
+//        super.onStart();
+//        XMessage.makeText(Main2Activity.this, "跨Activity吐司", XMessage.Duration.LENGTH_LONG).show(true);
+//        new Handler().postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                finish();
+//            }
+//        }, 2000);
+//    }
 }
