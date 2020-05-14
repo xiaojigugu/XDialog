@@ -1,10 +1,12 @@
 # XDialog
 [![](https://jitpack.io/v/com.gitee.giteeguguji/XDialog.svg)](https://jitpack.io/#com.gitee.giteeguguji/XDialog)
-#### 介绍
-简单易用的Dialog封装
+#### 介绍 
+简单易用的Dialog封装 
+![演示gif](https://gitee.com/giteeguguji/XDialog/blob/master/app/src/main/images/sample.gif "演示gif")
 
-#### 软件架构
-软件架构说明
+#### 软件架构 
+基于Dialog进行二次封装  
+Dialog->PhoneWindow->DecorView->自定义Dialog容器Layout
 
 
 #### 安装教程
