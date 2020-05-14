@@ -2,7 +2,7 @@
 [![](https://jitpack.io/v/com.gitee.giteeguguji/XDialog.svg)](https://jitpack.io/#com.gitee.giteeguguji/XDialog)
 #### 介绍 
 简单易用的Dialog封装  
-<img src="https://gitee.com/giteeguguji/XDialog/raw/master/app/src/main/images/sample.gif" width="50%" height="50%">
+<img src="https://gitee.com/giteeguguji/XDialog/raw/master/app/src/main/images/sample.gif" width="30%" height="30%">
 
 #### 软件架构 
 基于Dialog进行二次封装  
