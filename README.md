@@ -3,7 +3,7 @@
 #### 介绍
 简单易用的Dialog封装类-XDialog
 
-<img src="https://gitee.com/giteeguguji/XDialog/raw/master/app/src/main/images/sample.gif" width="30%" height="30%" onerror="this.src='/src/main/images/sample.gif'">
+<img src="https://gitee.com/giteeguguji/XDialog/raw/master/app/src/main/images/sample.gif" width="30%" height="30%" onerror="this.src='https://github.com/xiaojigugu/XDialog/blob/master/app/src/main/images/sample.gif?raw=true'">
 
 #### 软件架构 
 基于Dialog进行二次封装  
@@ -15,21 +15,21 @@
 
 #### 引用
 
-Add it in your root build.gradle at the end of repositories:  
-```  
+Add it in your root build.gradle at the end of repositories:
+```
     allprojects {  
         repositories {  
 			...  
 			maven { url 'https://jitpack.io' }  
 		}  
 	}  
-```  
-Step 2. Add the dependency  
-```  
+```
+Step 2. Add the dependency
+```
 	dependencies {  
 	        implementation 'com.gitee.giteeguguji:XDialog:v1.0'  
 	}  
-```  
+```
 #### 使用
 #####  自定义Dialog  
 1. 编写layout布局文件
@@ -64,7 +64,7 @@ Step 2. Add the dependency
         android:text="@string/confirm"
         android:textColor="#03A9F4" />
 </FrameLayout>
-```  
+```
 
 2. 自定义Dialog类
 ```java
@@ -131,11 +131,14 @@ public class XConfirmDialog extends XCoreDialog {
         xConfirmDialog.show();
     }
 </code></pre>
-<img src="https://gitee.com/giteeguguji/XDialog/raw/master/app/src/main/images/simple.png" height="30%" width="30%" onerror="this.src='/src/main/images/simple.png'">
+<img src="https://gitee.com/giteeguguji/XDialog/raw/master/app/src/main/images/simple.png" height="30%" width="30%" onerror="this.src='https://github.com/xiaojigugu/XDialog/blob/master/app/src/main/images/simple.png?raw=true'">
 
-4. 自定义动画  
+4. 自定义动画
+
 这里以内部默认的缩放动画为例
-```java
+
+<pre>
+<code class="java">
 /**
  * 缩放动画
  */
@@ -170,7 +173,9 @@ public class XAnimatorScale extends XAnimator {
         getView().animate().scaleX(0f).scaleY(0f).setDuration(ANIM_DURATION).start();
     }
 }
-```
+</code>
+</pre>
+
 <pre><code class="java">
 //使用缩放动画
 XConfirmDialog xConfirmDialog = new XConfirmDialog(MainActivity.this,new XAnimatorScale());
