@@ -2,7 +2,7 @@ package com.junt.demo;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.graphics.Point;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
@@ -10,15 +10,13 @@ import android.widget.TextView;
 
 import com.junt.demo.dialog.LifeCycleDialog;
 import com.junt.demo.dialog.MyAttachDialog;
+import com.junt.xdialog.anim.XSideAnimator;
 import com.junt.xdialog.core.AttachDialog;
-import com.junt.xdialog.core.BottomDialog;
 import com.junt.xdialog.core.PositionDialog;
+import com.junt.xdialog.core.XSideDialog;
 import com.junt.xdialog.impl.XConfirmDialog;
 import com.junt.xdialog.impl.XLoadingDialog;
 import com.junt.xdialog.impl.XMessage;
-import com.junt.xdialog.utils.ScreenUtils;
-
-import java.util.Random;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -28,7 +26,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        findViewById(R.id.tvBottom).setOnClickListener(this);
+        findViewById(R.id.tvSideLeft).setOnClickListener(this);
+        findViewById(R.id.tvSideTop).setOnClickListener(this);
+        findViewById(R.id.tvSideRight).setOnClickListener(this);
+        findViewById(R.id.tvSideBottom).setOnClickListener(this);
+
         findViewById(R.id.tvSimple).setOnClickListener(this);
         findViewById(R.id.tvAttach).setOnClickListener(this);
         findViewById(R.id.tvLoading).setOnClickListener(this);
@@ -40,8 +42,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.tvBottom:
-                showBottomDialog();
+            case R.id.tvSideLeft:
+                showLeftSideDialog();
+                break;
+            case R.id.tvSideTop:
+                showTopSideDialog();
+                break;
+            case R.id.tvSideRight:
+                showRightSideDialog();
+                break;
+            case R.id.tvSideBottom:
+                showBottomSideDialog();
                 break;
             case R.id.tvSimple:
                 showSimpleConfirmDialog();
@@ -70,6 +81,94 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 showLifeCycleDialog();
                 break;
         }
+    }
+
+    /**
+     * 左侧侧边菜单
+     */
+    private void showLeftSideDialog() {
+        XSideDialog xSideDialog = new XSideDialog(this, XSideAnimator.Orientation.LEFT) {
+            @Override
+            protected int getImplLayoutResId() {
+                return R.layout.dialog_side_left;
+            }
+
+            @Override
+            protected void initDialogContent() {
+
+            }
+        };
+        Rect rect = new Rect();
+        //左侧Dialog仅left有效
+        rect.left = 0;
+        xSideDialog.setMargin(rect);
+        xSideDialog.show();
+    }
+
+    /**
+     * 顶部侧边菜单
+     */
+    private void showTopSideDialog() {
+        XSideDialog xSideDialog = new XSideDialog(this, XSideAnimator.Orientation.TOP) {
+            @Override
+            protected int getImplLayoutResId() {
+                return R.layout.dialog_side_top;
+            }
+
+            @Override
+            protected void initDialogContent() {
+
+            }
+        };
+        Rect rect = new Rect();
+        //左侧Dialog仅left有效
+        rect.top = 0;
+        xSideDialog.setMargin(rect);
+        xSideDialog.show();
+    }
+
+    /**
+     * 右侧边菜单
+     */
+    private void showRightSideDialog() {
+        XSideDialog xSideDialog = new XSideDialog(this, XSideAnimator.Orientation.RIGHT) {
+            @Override
+            protected int getImplLayoutResId() {
+                return R.layout.dialog_side_right;
+            }
+
+            @Override
+            protected void initDialogContent() {
+
+            }
+        };
+        Rect rect = new Rect();
+        //左侧Dialog仅left有效
+        rect.right = 0;
+        xSideDialog.setMargin(rect);
+        xSideDialog.show();
+    }
+
+    /**
+     * 底部侧边菜单
+     */
+    private void showBottomSideDialog() {
+        XSideDialog xSideDialog = new XSideDialog(this, XSideAnimator.Orientation.BOTTOM) {
+            @Override
+            protected int getImplLayoutResId() {
+                return R.layout.dialog_side_bottom;
+            }
+
+            @Override
+            protected void initDialogContent() {
+
+            }
+        };
+        Rect rect = new Rect();
+        //左侧Dialog仅left有效
+        rect.bottom = 0;
+        xSideDialog.setMargin(rect);
+        xSideDialog.show();
     }
 
 
@@ -123,24 +222,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         XConfirmDialog xConfirmDialog = new XConfirmDialog(this);
         xConfirmDialog.setText("简易的确认Dialog");
         xConfirmDialog.show();
-    }
-
-    /**
-     * 底部弹框实现（也可自定义类继承BottomDialog）
-     */
-    private void showBottomDialog() {
-        BottomDialog bottomDialog = new BottomDialog(this) {
-            @Override
-            protected int getImplLayoutResId() {
-                return R.layout.dialog_bottom;
-            }
-
-            @Override
-            protected void initDialogContent() {
-
-            }
-        };
-        bottomDialog.show();
     }
 
     /**
