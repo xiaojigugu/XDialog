@@ -1,8 +1,9 @@
 # XDialog
 [![](https://jitpack.io/v/com.gitee.giteeguguji/XDialog.svg)](https://jitpack.io/#com.gitee.giteeguguji/XDialog)
 #### 介绍
-简单易用的Dialog封装类-XDialog  
-<img src="https://gitee.com/giteeguguji/XDialog/raw/master/app/src/main/images/sample.gif" width="30%" height="30%">
+简单易用的Dialog封装类-XDialog
+
+<img src="https://gitee.com/giteeguguji/XDialog/raw/master/app/src/main/images/sample.gif" width="30%" height="30%" onerror="this.src='https://raw.githubusercontent.com/xiaojigugu/XDialog/master/app/src/main/images/sample.gif'">
 
 #### 软件架构 
 基于Dialog进行二次封装  
@@ -130,7 +131,7 @@ public class XConfirmDialog extends XCoreDialog {
         xConfirmDialog.show();
     }
 </code></pre>
-<img src="https://gitee.com/giteeguguji/XDialog/raw/master/app/src/main/images/simple.png" height="30%" width="30%">
+<img src="https://gitee.com/giteeguguji/XDialog/raw/master/app/src/main/images/simple.png" height="30%" width="30%" onerror="this.src='https://raw.githubusercontent.com/xiaojigugu/XDialog/master/app/src/main/images/simple.png'">
 
 4. 自定义动画  
 这里以内部默认的缩放动画为例
