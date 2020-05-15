@@ -127,7 +127,7 @@ public class XConfirmDialog extends XCoreDialog {
 ```java
   private void showSimpleConfirmDialog() {
         XConfirmDialog xConfirmDialog = new XConfirmDialog(MainActivity.this);
-        xConfirmDialog.setText(&quot;简易的确认Dialog&quot;);
+        xConfirmDialog.setText("简易的确认Dialog");
         xConfirmDialog.show();
     }
 ```
@@ -176,7 +176,7 @@ public class XAnimatorScale extends XAnimator {
 ```java
 //使用缩放动画
 XConfirmDialog xConfirmDialog = new XConfirmDialog(MainActivity.this,new XAnimatorScale());
-xConfirmDialog.setText(&quot;简易的确认Dialog&quot;);
+xConfirmDialog.setText("简易的确认Dialog");
 xConfirmDialog.show();
 ```
 
