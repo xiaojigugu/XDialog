@@ -3,7 +3,7 @@
 #### 介绍
 简单易用的Dialog封装类-XDialog
 
-<img src="https://gitee.com/giteeguguji/XDialog/raw/master/app/src/main/images/sample.gif" width="30%" height="30%" onerror="this.src='https://github.com/xiaojigugu/XDialog/blob/master/app/src/main/images/sample.gif?raw=true'">
+<img src="https://gitee.com/giteeguguji/XDialog/raw/master/app/src/main/images/simple.gif" width="30%" height="30%" onerror="https://github.com/xiaojigugu/XDialog/blob/master/app/src/main/images/simple.gif?raw=true">
 
 #### 软件架构 
 基于Dialog进行二次封装  
