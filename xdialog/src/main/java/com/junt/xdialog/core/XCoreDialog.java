@@ -127,17 +127,8 @@ public abstract class XCoreDialog extends Dialog {
                 System.out.println(TAG + ".onStart");
                 onDialogViewCreated();
                 if (xAnimator != null) {
-                    xAnimator.bindAnimView(getDialogView(), getRealContext(), XCoreDialog.this);
                     onAnimBind();
-                    if (getXDialogCallBack() != null) {
-                        getXDialogCallBack().onAnimatorBindDialogView(xAnimator);
-                    }
-                    xAnimator.initAnim();
                     onAnimInitialized();
-                    isReady = true;
-                    if (getXDialogCallBack() != null) {
-                        getXDialogCallBack().onAnimInitialized(xAnimator);
-                    }
                 }
             }
         });
@@ -185,12 +176,21 @@ public abstract class XCoreDialog extends Dialog {
      * XAnimator已经绑定目标DialogView但还未调用initAnim()
      */
     protected void onAnimBind() {
+        xAnimator.bindAnimView(getDialogView(), getRealContext(), XCoreDialog.this);
+        if (getXDialogCallBack() != null) {
+            getXDialogCallBack().onAnimatorBindDialogView(xAnimator);
+        }
     }
 
     /**
      * XAnimator已经绑定目标DialogView并且已经调用initAnim()
      */
     protected void onAnimInitialized() {
+        isReady = true;
+        xAnimator.initAnim();
+        if (getXDialogCallBack() != null) {
+            getXDialogCallBack().onAnimInitialized(xAnimator);
+        }
     }
 
     /**
