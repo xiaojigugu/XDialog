@@ -3,6 +3,7 @@ package com.junt.xdialog.core;
 import android.content.Context;
 import android.graphics.Rect;
 import android.view.MotionEvent;
+import android.view.VelocityTracker;
 
 import com.junt.xdialog.anim.XAnimator;
 import com.junt.xdialog.anim.XSideAnimator;
@@ -16,6 +17,7 @@ public abstract class XSideDialog extends XCoreDialog {
 
     private XSideAnimator.Orientation orientation;
     private float showTranslationX, showTranslationY;
+    private VelocityTracker velocityTracker;
 
     public XSideDialog(@NonNull Context context, XSideAnimator.Orientation orientation) {
         this(context, new XSideAnimator(orientation));
@@ -41,6 +43,10 @@ public abstract class XSideDialog extends XCoreDialog {
 
     @Override
     public boolean onTouchEvent(@NonNull MotionEvent event) {
+        if (velocityTracker == null) {
+            velocityTracker = VelocityTracker.obtain();
+        }
+        velocityTracker.addMovement(event);
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 downX = event.getX();
@@ -74,32 +80,34 @@ public abstract class XSideDialog extends XCoreDialog {
                 break;
             case MotionEvent.ACTION_CANCEL:
             case MotionEvent.ACTION_UP:
+                velocityTracker.computeCurrentVelocity(1000);
+//                System.out.println("滑动速率：Vx="+velocityTracker.getXVelocity(0)+",Vy="+velocityTracker.getYVelocity(0));
                 moveX = event.getX();
                 moveY = event.getY();
                 switch (orientation) {
                     case LEFT:
-                        if (moveX < downX && (downX - moveX) > getDialogView().getWidth() / 3f) {
+                        if (moveX < downX && velocityTracker.getXVelocity(0) < -1000) {
                             dismiss();
                         } else {
                             getDialogView().animate().translationX(showTranslationX).setDuration(80).start();
                         }
                         break;
                     case RIGHT:
-                        if (moveX > downX && (moveX - downX) > getDialogView().getWidth() / 3f) {
+                        if (moveX > downX && velocityTracker.getXVelocity(0) > 1000) {
                             dismiss();
                         } else {
                             getDialogView().animate().translationX(showTranslationX).setDuration(80).start();
                         }
                         break;
                     case TOP:
-                        if (moveY < downY && (downY - moveY) > getDialogView().getHeight() / 3f) {
+                        if (moveY < downY && velocityTracker.getYVelocity(0) < -1000) {
                             dismiss();
                         } else {
                             getDialogView().animate().translationY(showTranslationY).setDuration(80).start();
                         }
                         break;
                     case BOTTOM:
-                        if (moveY > downY && (moveY - downY) > getDialogView().getHeight() / 3f) {
+                        if (moveY > downY && velocityTracker.getYVelocity(0) > 1000) {
                             dismiss();
                         } else {
                             getDialogView().animate().translationY(showTranslationY).setDuration(80).start();
