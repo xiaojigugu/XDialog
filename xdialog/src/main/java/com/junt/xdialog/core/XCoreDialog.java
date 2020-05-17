@@ -36,7 +36,7 @@ public abstract class XCoreDialog extends Dialog {
     private boolean isCancelOnTouchOutSide = true;
     protected XAnimator xAnimator;
     private DialogStack dialogStack;
-    private DialogContainerLayout dialogContainer;
+    protected DialogContainerLayout dialogContainer;
     protected int touchSlop;
     /**
      * DialogView是否已经完成初始化（包含动画得绑定及初始化）
@@ -62,17 +62,17 @@ public abstract class XCoreDialog extends Dialog {
         }
     }
 
+    /**
+     * 注册生命周期回调
+     * @param context Activity
+     */
     private void registerActivityLifeCallBack(@NonNull Activity context) {
         context.getApplication().registerActivityLifecycleCallbacks(new ActivityLifeCycleCallback() {
             @Override
             public void onActivityDestroyed(@NonNull Activity activity) {
                 super.onActivityDestroyed(activity);
                 if (activity == getOwnerActivity()) {
-                    destroy();
                     onDestroy();
-                    if (getXDialogCallBack() != null) {
-                        getXDialogCallBack().onDestroy();
-                    }
                 }
             }
         });
@@ -86,7 +86,7 @@ public abstract class XCoreDialog extends Dialog {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         System.out.println(TAG + ".onCreate");
-        setStatusBarTrans();
+        initStatusBar();
         touchSlop = ViewConfiguration.get(getContext()).getScaledTouchSlop();
         dialogContainer = (DialogContainerLayout) getLayoutInflater().inflate(R.layout.dialog_container, (ViewGroup) getWindow().getDecorView(), false);
         dialogContainer.setTouchCallBack(new DialogContainerLayout.TouchCallBack() {
@@ -100,7 +100,6 @@ public abstract class XCoreDialog extends Dialog {
                 return XCoreDialog.this.onContainerTouchEvent(ev);
             }
         });
-        dialogContainer.setBackground(getBackgroundDrawable());
 
         final View view = LayoutInflater.from(getContext()).inflate(getImplLayoutResId(), dialogContainer, false);
         view.setAlpha(0);
@@ -112,11 +111,7 @@ public abstract class XCoreDialog extends Dialog {
         if (getXDialogCallBack() != null) {
             getXDialogCallBack().onCreate();
         }
-    }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
         initDialogContent();
         if (getXDialogCallBack() != null) {
             getXDialogCallBack().onContentReady(getDialogView());
@@ -124,14 +119,28 @@ public abstract class XCoreDialog extends Dialog {
         runOnQueue(new Runnable() {
             @Override
             public void run() {
-                System.out.println(TAG + ".onStart");
                 onDialogViewCreated();
+                drawBackground();
+
                 if (xAnimator != null) {
                     onAnimBind();
                     onAnimInitialized();
                 }
             }
         });
+    }
+
+    /**
+     * 绘制背景阴影
+     */
+    private void drawBackground() {
+        Rect backgroundBound = getBackgroundBound();
+        int backgroundColor = getBackgroundColor();
+        if (backgroundBound != null && backgroundColor != 0) {
+            dialogContainer.setBackgroundColor(backgroundColor, backgroundBound);
+        } else {
+            dialogContainer.setBackgroundColor(backgroundColor);
+        }
     }
 
     /**
@@ -167,9 +176,17 @@ public abstract class XCoreDialog extends Dialog {
     }
 
     protected void onDismiss() {
+        hide();
+        if (getXDialogCallBack() != null) {
+            getXDialogCallBack().onDismiss();
+        }
     }
 
     protected void onDestroy() {
+        destroy();
+        if (getXDialogCallBack() != null) {
+            getXDialogCallBack().onDestroy();
+        }
     }
 
     /**
@@ -196,8 +213,19 @@ public abstract class XCoreDialog extends Dialog {
     /**
      * @return Dialog的根布局背景色
      */
-    public Drawable getBackgroundDrawable() {
-        return new ColorDrawable(Color.parseColor("#80000000"));
+    public int getBackgroundColor() {
+        return getDefaultShadowColor();
+    }
+
+    /**
+     * @return 默认的透明度阴影背景
+     */
+    protected int getDefaultShadowColor() {
+        return Color.parseColor("#80000000");
+    }
+
+    public Rect getBackgroundBound() {
+        return null;
     }
 
     /**
@@ -343,19 +371,11 @@ public abstract class XCoreDialog extends Dialog {
             delayRun(new Runnable() {
                 @Override
                 public void run() {
-                    hide();
                     onDismiss();
-                    if (getXDialogCallBack() != null) {
-                        getXDialogCallBack().onDismiss();
-                    }
                 }
             }, xAnimator.ANIM_DURATION);
         } else {
-            hide();
             onDismiss();
-            if (getXDialogCallBack() != null) {
-                getXDialogCallBack().onDismiss();
-            }
         }
     }
 
@@ -441,7 +461,7 @@ public abstract class XCoreDialog extends Dialog {
     /**
      * 同步window的状态栏，与Activity的window一致
      */
-    private void setStatusBarTrans() {
+    private void initStatusBar() {
         Window activityWindow = ((Activity) getRealContext()).getWindow();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {

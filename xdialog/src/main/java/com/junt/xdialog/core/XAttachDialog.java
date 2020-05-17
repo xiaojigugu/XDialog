@@ -4,8 +4,6 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.Rect;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.view.View;
 
@@ -17,13 +15,13 @@ import com.junt.xdialog.utils.ScreenUtils;
 
 import androidx.annotation.NonNull;
 
-public abstract class AttachDialog extends PositionDialog {
+public abstract class XAttachDialog extends XPositionDialog {
     private View attachView;
     private Point screenPoint;
     private Direction direction;
     private Align align;
 
-    public AttachDialog(@NonNull Context context) {
+    public XAttachDialog(@NonNull Context context) {
         super(context, new XAnimatorAttach());
     }
 
@@ -31,7 +29,7 @@ public abstract class AttachDialog extends PositionDialog {
         attach(attachView, null, null);
     }
 
-    public AttachDialog attach(View attachView, Direction direction, Align align) {
+    public XAttachDialog attach(View attachView, Direction direction, Align align) {
         this.attachView = attachView;
         this.direction = direction;
         this.align = align;
@@ -53,13 +51,13 @@ public abstract class AttachDialog extends PositionDialog {
                 handleCustomPosition(attachViewRect, dialogViewVisibleRect);
             }
             //调用父类PositionDialog方法进行摆放
-            AttachDialog.super.onDialogViewCreated();
+            XAttachDialog.super.onDialogViewCreated();
         }
     }
 
     @Override
     public XDialogLifeCallBack getXDialogCallBack() {
-        return new XDialogLifeCallbackImpl(){
+        return new XDialogLifeCallbackImpl() {
             @Override
             public void onAnimatorBindDialogView(XAnimator xAnimator) {
                 //摆放完成后初始化Animator
@@ -77,36 +75,48 @@ public abstract class AttachDialog extends PositionDialog {
                 if (align == Align.TOP) {
                     //上对齐
                     setPosition(attachViewRect.left - dialogViewVisibleRect.width() / 2 - getExtraDP(), attachViewRect.top + dialogViewVisibleRect.height() / 2);
-                } else {
-                    //其他默认下对齐
+                } else if (align == Align.BOTTOM) {
+                    //下对齐
                     setPosition(attachViewRect.left - dialogViewVisibleRect.width() / 2 - getExtraDP(), attachViewRect.bottom - dialogViewVisibleRect.height() / 2);
+                } else {
+                    //居中对齐
+                    setPosition(attachViewRect.left - dialogViewVisibleRect.width() / 2 - getExtraDP(), attachViewRect.centerY());
                 }
                 break;
             case TOP://上侧
                 if (align == Align.LEFT) {
                     //左对齐
                     setPosition(attachViewRect.left + dialogViewVisibleRect.width() / 2, attachViewRect.top - dialogViewVisibleRect.height() / 2 - getExtraDP());
-                } else {
-                    //其他默认右对齐
+                } else if (align == Align.RIGHT) {
+                    //右对齐
                     setPosition(attachViewRect.right - dialogViewVisibleRect.width() / 2, attachViewRect.top - dialogViewVisibleRect.height() / 2 - getExtraDP());
+                } else {
+                    //居中
+                    setPosition(attachViewRect.centerX(), attachViewRect.top - dialogViewVisibleRect.height() / 2 - getExtraDP());
                 }
                 break;
             case RIGHT://右侧
                 if (align == Align.TOP) {
                     //上对齐
                     setPosition(attachViewRect.right + dialogViewVisibleRect.width() / 2 + getExtraDP(), attachViewRect.top + dialogViewVisibleRect.height() / 2);
-                } else {
+                } else if (align == Align.BOTTOM) {
                     //其他默认下对齐
                     setPosition(attachViewRect.right + dialogViewVisibleRect.width() / 2 + getExtraDP(), attachViewRect.bottom - dialogViewVisibleRect.height() / 2);
+                } else {
+                    //居中对齐
+                    setPosition(attachViewRect.right + dialogViewVisibleRect.width() / 2 + getExtraDP(), attachViewRect.centerY());
                 }
                 break;
             case BOTTOM://下侧
                 if (align == Align.LEFT) {
                     //左对齐
                     setPosition(attachViewRect.left + dialogViewVisibleRect.width() / 2, attachViewRect.bottom + dialogViewVisibleRect.height() / 2 + getExtraDP());
-                } else {
+                } else if (align == Align.RIGHT) {
                     //其他默认右对齐
                     setPosition(attachViewRect.right - dialogViewVisibleRect.width() / 2, attachViewRect.bottom + dialogViewVisibleRect.height() / 2 + getExtraDP());
+                } else {
+                    //居中对齐
+                    setPosition(attachViewRect.centerX(), attachViewRect.bottom + dialogViewVisibleRect.height() / 2 + getExtraDP());
                 }
                 break;
         }
@@ -135,8 +145,12 @@ public abstract class AttachDialog extends PositionDialog {
     }
 
     @Override
-    public Drawable getBackgroundDrawable() {
-        return new ColorDrawable(Color.TRANSPARENT);
+    public int getBackgroundColor() {
+        return Color.TRANSPARENT;
+    }
+
+    public View getAttachView() {
+        return attachView;
     }
 
     private int getExtraDP() {
@@ -164,6 +178,7 @@ public abstract class AttachDialog extends PositionDialog {
         LEFT,
         TOP,
         RIGHT,
-        BOTTOM
+        BOTTOM,
+        CENTER
     }
 }

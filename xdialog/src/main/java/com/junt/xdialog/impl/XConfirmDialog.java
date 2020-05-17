@@ -6,6 +6,7 @@ import android.widget.TextView;
 
 import com.junt.xdialog.R;
 import com.junt.xdialog.anim.XAnimator;
+import com.junt.xdialog.callbacks.XItemChildClickListener;
 import com.junt.xdialog.core.XCoreDialog;
 
 import androidx.annotation.NonNull;
@@ -14,6 +15,7 @@ public class XConfirmDialog extends XCoreDialog {
 
     private String text;
     private TextView textView;
+    private XItemChildClickListener xItemChildClickListener;
 
     public XConfirmDialog(@NonNull Context context) {
         super(context);
@@ -34,6 +36,9 @@ public class XConfirmDialog extends XCoreDialog {
             @Override
             public void onClick(View v) {
                 dismiss();
+                if (xItemChildClickListener != null) {
+                    xItemChildClickListener.onChildClick(v);
+                }
             }
         });
 
@@ -41,10 +46,16 @@ public class XConfirmDialog extends XCoreDialog {
         textView.setText(text);
     }
 
-    public void setText(String text) {
+    public XConfirmDialog setItemChildClickListener(XItemChildClickListener xItemChildClickListener) {
+        this.xItemChildClickListener = xItemChildClickListener;
+        return this;
+    }
+
+    public XConfirmDialog setText(String text) {
         this.text = text;
         if (textView != null) {
             textView.setText(text);
         }
+        return this;
     }
 }

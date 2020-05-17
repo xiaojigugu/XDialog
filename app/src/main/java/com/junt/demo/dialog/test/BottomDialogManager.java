@@ -105,8 +105,8 @@ public class BottomDialogManager {
         }
 
         @Override
-        public Drawable getBackgroundDrawable() {
-            return new ColorDrawable(Color.TRANSPARENT);
+        public int getBackgroundColor() {
+            return Color.TRANSPARENT;
         }
 
         @Override
@@ -235,8 +235,8 @@ public class BottomDialogManager {
         }
 
         @Override
-        public Drawable getBackgroundDrawable() {
-            return new ColorDrawable(Color.TRANSPARENT);
+        public int getBackgroundColor() {
+            return Color.TRANSPARENT;
         }
 
 

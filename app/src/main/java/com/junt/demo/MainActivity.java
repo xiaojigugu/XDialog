@@ -6,20 +6,30 @@ import android.graphics.Rect;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.TextView;
 
 import com.junt.demo.dialog.LifeCycleDialog;
-import com.junt.demo.dialog.MyAttachDialog;
+import com.junt.demo.dialog.ListXAttachDialog;
+import com.junt.demo.dialog.MyXAttachDialog;
 import com.junt.xdialog.anim.XSideAnimator;
-import com.junt.xdialog.core.AttachDialog;
-import com.junt.xdialog.core.PositionDialog;
+import com.junt.xdialog.callbacks.XItemChildClickListener;
+import com.junt.xdialog.core.XAttachDialog;
+import com.junt.xdialog.core.XPartShadowDialog;
+import com.junt.xdialog.core.XPositionDialog;
 import com.junt.xdialog.core.XSideDialog;
 import com.junt.xdialog.impl.XConfirmDialog;
 import com.junt.xdialog.impl.XLoadingDialog;
 import com.junt.xdialog.impl.XMessage;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
+    private XAttachDialog.Direction attachDirection = XAttachDialog.Direction.valueOf("BOTTOM");
+    private XAttachDialog.Align attachAlign = XAttachDialog.Align.valueOf("CENTER");
+    private TextView tvAttachFlag;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,8 +42,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         findViewById(R.id.tvSideBottom).setOnClickListener(this);
 
         findViewById(R.id.tvSimple).setOnClickListener(this);
+
+        tvAttachFlag = findViewById(R.id.tvAttachFlag);
+        findViewById(R.id.tvAttachDirection).setOnClickListener(this);
+        findViewById(R.id.tvAttachAlign).setOnClickListener(this);
         findViewById(R.id.tvAttach).setOnClickListener(this);
+
         findViewById(R.id.tvLoading).setOnClickListener(this);
+        findViewById(R.id.tvBackDialog).setOnClickListener(this);
         findViewById(R.id.tvMsg).setOnClickListener(this);
         findViewById(R.id.tvMsgRandomLoc).setOnClickListener(this);
         findViewById(R.id.tvJump).setOnClickListener(this);
@@ -57,11 +73,31 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.tvSimple:
                 showSimpleConfirmDialog();
                 break;
+            case R.id.tvAttachDirection:
+                List<String> orientationList = new ArrayList<>();
+                orientationList.add("LEFT");
+                orientationList.add("TOP");
+                orientationList.add("RIGHT");
+                orientationList.add("BOTTOM");
+                showAttachListDialog(findViewById(R.id.tvAttachDirection), orientationList, true);
+                break;
+            case R.id.tvAttachAlign:
+                List<String> alignList = new ArrayList<>();
+                alignList.add("LEFT");
+                alignList.add("TOP");
+                alignList.add("RIGHT");
+                alignList.add("BOTTOM");
+                alignList.add("CENTER");
+                showAttachListDialog(findViewById(R.id.tvAttachAlign), alignList, false);
+                break;
             case R.id.tvAttach:
                 showAttachDialog();
                 break;
             case R.id.tvLoading:
                 showLoadingDialog();
+                break;
+            case R.id.tvBackDialog:
+                showPartBackDialog();
                 break;
             case R.id.tvMsg:
                 showMsgDialog("标准吐司");
@@ -81,6 +117,29 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 showLifeCycleDialog();
                 break;
         }
+    }
+
+    XPartShadowDialog partShadowDialog;
+
+    /**
+     * 背景阴影只显示部分（阴影位于Dialog下方）
+     */
+    private void showPartBackDialog() {
+        if (partShadowDialog == null) {
+            partShadowDialog = new XPartShadowDialog(this) {
+                @Override
+                protected int getImplLayoutResId() {
+                    return R.layout.dialog_part_shadow;
+                }
+
+                @Override
+                protected void initDialogContent() {
+
+                }
+            };
+            partShadowDialog.attach(findViewById(R.id.tvBackDialog), XAttachDialog.Direction.BOTTOM, XAttachDialog.Align.CENTER);
+        }
+        partShadowDialog.show();
     }
 
     /**
@@ -202,7 +261,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
     /**
-     * 显示LoadingDialog，
+     * 自带LoadingView的XLoadingDialog
      */
     private void showLoadingDialog() {
         XLoadingDialog loadingDialog = new XLoadingDialog(this);
@@ -219,8 +278,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      * 简易Dialog带确认按钮
      */
     private void showSimpleConfirmDialog() {
-        XConfirmDialog xConfirmDialog = new XConfirmDialog(this);
-        xConfirmDialog.setText("简易的确认Dialog");
+        XConfirmDialog xConfirmDialog = new XConfirmDialog(this)
+                .setItemChildClickListener(new XItemChildClickListener() {
+                    @Override
+                    public void onChildClick(View view) {
+
+                    }
+                })
+                .setText("简易的确认Dialog");
         xConfirmDialog.show();
     }
 
@@ -231,7 +296,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      * @param y dialog中心y坐标
      */
     private void showPositionDialog(int x, int y) {
-        PositionDialog positionDialog = new PositionDialog(this) {
+        XPositionDialog XPositionDialog = new XPositionDialog(this) {
             @Override
             protected int getImplLayoutResId() {
                 return R.layout.dialog_simple;
@@ -249,25 +314,45 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 });
             }
         };
-        positionDialog.setCanceledOnTouchOutside(false);
-        positionDialog.setPosition(x, y);
-        positionDialog.show();
+        XPositionDialog.setCanceledOnTouchOutside(false);
+        XPositionDialog.setPosition(x, y);
+        XPositionDialog.show();
     }
-
-    private MyAttachDialog attachDialog;
 
     /**
      * 依附于View的Dialog
-     * AttachDialog.Direction - 指明Dialog位于View的上下左右方位
-     * AttachDialog.Align - 表明对齐方式，TOP、BOTTOM（上、下边界对齐只对左右位置生效），LEFT、RIGHT（左、右边界对齐只对上下位置生效）
+     * XAttachDialog.Direction - 指明Dialog位于View的上下左右方位
+     * XAttachDialog.Align - 表明对齐方式，TOP/BOTTOM（上/下边界对齐只对左右位置生效），LEFT/RIGHT（左/右边界对齐只对上下位置生效），CENTER(居中)
      */
     private void showAttachDialog() {
-        if (attachDialog == null) {
-            attachDialog = new MyAttachDialog(this);
-            attachDialog.setText("依附于View的Dialog(替代PopupView)");
-            attachDialog.attach(findViewById(R.id.tvAttach), AttachDialog.Direction.BOTTOM, AttachDialog.Align.RIGHT);
-        }
+        MyXAttachDialog attachDialog = new MyXAttachDialog(this);
+        attachDialog.setText("XAttachDialog(PopupView功能)");
+        attachDialog.attach(findViewById(R.id.tvAttach), attachDirection, attachAlign);
         attachDialog.show();
+    }
+
+    /**
+     * 列表选择Dialog
+     *
+     * @param attachView  依附的View
+     * @param list        列表数据
+     * @param isDirection 是否是选择AttachDialog的方向
+     */
+    private void showAttachListDialog(View attachView, final List<String> list, final boolean isDirection) {
+        ListXAttachDialog listAttachDialog = new ListXAttachDialog(this);
+        listAttachDialog.setData(list, new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (isDirection) {
+                    attachDirection = XAttachDialog.Direction.valueOf(list.get(position));
+                } else {
+                    attachAlign = XAttachDialog.Align.valueOf(list.get(position));
+                }
+                tvAttachFlag.setText(String.format("%s,%s", attachDirection.name(), attachAlign.name()));
+            }
+        });
+        listAttachDialog.attach(attachView, XAttachDialog.Direction.BOTTOM, XAttachDialog.Align.CENTER);
+        listAttachDialog.show();
     }
 
     /**

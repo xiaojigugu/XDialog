@@ -7,15 +7,15 @@ import com.junt.xdialog.anim.XAnimator;
 
 import androidx.annotation.NonNull;
 
-public abstract class PositionDialog extends XCoreDialog {
+public abstract class XPositionDialog extends XCoreDialog {
 
     private int x, y;
 
-    public PositionDialog(@NonNull Context context) {
+    public XPositionDialog(@NonNull Context context) {
         super(context);
     }
 
-    public PositionDialog(@NonNull Context context, XAnimator xAnimator) {
+    public XPositionDialog(@NonNull Context context, XAnimator xAnimator) {
         super(context, xAnimator);
     }
 
@@ -27,7 +27,6 @@ public abstract class PositionDialog extends XCoreDialog {
     @Override
     protected void onDialogViewCreated() {
         Rect dialogViewVisibleRect = getDialogViewVisibleRect();
-        System.out.println(getClass().getSimpleName() + ",onDialogViewCreated:" + dialogViewVisibleRect.toString());
         int dialogCenterX = dialogViewVisibleRect.left + dialogViewVisibleRect.width() / 2;
         int dialogCenterY = dialogViewVisibleRect.top + dialogViewVisibleRect.height() / 2;
         getDialogView().setTranslationX(x - dialogCenterX);

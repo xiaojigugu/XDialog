@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#B3000000"
+    android:padding="10dp"
     tools:context=".MainActivity">
 
     <TextView
@@ -12,7 +13,7 @@
         android:layout_width="100dp"
         android:layout_height="40dp"
         android:layout_gravity="center_vertical"
-        android:background="#BA6464"
+        android:background="@color/colorPrimary"
         android:gravity="center"
         android:text="左侧Dialog"
         android:textColor="#ffffff"
@@ -26,7 +27,7 @@
         android:layout_width="100dp"
         android:layout_height="40dp"
         android:layout_gravity="center_horizontal"
-        android:background="#BA6464"
+        android:background="@color/colorPrimary"
         android:gravity="center"
         android:text="顶侧Dialog"
         android:textColor="#ffffff"
@@ -40,7 +41,7 @@
         android:layout_width="100dp"
         android:layout_height="40dp"
         android:layout_gravity="center_vertical|end"
-        android:background="#BA6464"
+        android:background="@color/colorPrimary"
         android:gravity="center"
         android:text="右侧Dialog"
         android:textColor="#ffffff"
@@ -54,7 +55,7 @@
         android:layout_width="100dp"
         android:layout_height="40dp"
         android:layout_gravity="bottom|center_horizontal"
-        android:background="#BA6464"
+        android:background="@color/colorPrimary"
         android:gravity="center"
         android:text="底侧Dialog"
         android:textColor="#ffffff"
@@ -63,95 +64,127 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <LinearLayout
+    <GridLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:orientation="vertical">
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="50dp"
+        android:orientation="vertical"
+        android:rowCount="2">
 
         <TextView
             android:id="@+id/tvSimple"
             android:layout_width="100dp"
             android:layout_height="40dp"
+            android:layout_margin="2dp"
             android:layout_marginTop="10dp"
-            android:background="#BA6464"
+            android:background="#ffffff"
             android:gravity="center"
-            android:text="简易Dialog"
-            android:textColor="#ffffff"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/tvAttach"
-            android:layout_width="100dp"
-            android:layout_height="40dp"
-            android:layout_marginTop="10dp"
-            android:background="#BA6464"
-            android:gravity="center"
-            android:text="依附Dialog"
-            android:textColor="#ffffff"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:text="Dialog示例"
+            android:textColor="#000000" />
 
         <TextView
             android:id="@+id/tvLoading"
             android:layout_width="100dp"
             android:layout_height="40dp"
+            android:layout_margin="2dp"
             android:layout_marginTop="10dp"
-            android:background="#BA6464"
+            android:background="#ffffff"
             android:gravity="center"
             android:text="加载Dialog"
-            android:textColor="#ffffff"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:textColor="#000000" />
+
+        <TextView
+            android:id="@+id/tvBackDialog"
+            android:layout_width="100dp"
+            android:layout_height="40dp"
+            android:layout_margin="2dp"
+            android:background="#ffffff"
+            android:gravity="center"
+            android:text="PartShadowDialog"
+            android:textColor="#000000" />
 
         <TextView
             android:id="@+id/tvMsg"
             android:layout_width="100dp"
             android:layout_height="40dp"
+            android:layout_margin="2dp"
             android:layout_marginTop="10dp"
-            android:background="#BA6464"
+            android:background="#ffffff"
             android:gravity="center"
             android:text="标准吐司Dialog"
-            android:textColor="#ffffff"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:textColor="#000000" />
 
         <TextView
             android:id="@+id/tvMsgRandomLoc"
             android:layout_width="100dp"
             android:layout_height="40dp"
+            android:layout_margin="2dp"
             android:layout_marginTop="10dp"
-            android:background="#BA6464"
+            android:background="#ffffff"
             android:gravity="center"
             android:text="任意吐司Dialog"
-            android:textColor="#ffffff"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:textColor="#000000" />
 
         <TextView
             android:id="@+id/tvJump"
             android:layout_width="100dp"
             android:layout_height="40dp"
+            android:layout_margin="2dp"
             android:layout_marginTop="10dp"
-            android:background="#BA6464"
+            android:background="#ffffff"
             android:gravity="center"
             android:text="跳转Activity"
-            android:textColor="#ffffff"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-    </LinearLayout>
+            android:textColor="#000000" />
+    </GridLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="180dp"
+        android:orientation="horizontal"
+        android:padding="10dp">
+
+        <TextView
+            android:id="@+id/tvAttachDirection"
+            android:layout_width="100dp"
+            android:layout_height="40dp"
+            android:background="#ffffff"
+            android:gravity="center"
+            android:text="Attach方向"
+            android:textColor="#000000" />
+
+        <TextView
+            android:id="@+id/tvAttachAlign"
+            android:layout_width="100dp"
+            android:layout_height="40dp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="10dp"
+            android:background="#ffffff"
+            android:gravity="center"
+            android:text="Attach对齐"
+            android:textColor="#000000" />
+
+        <TextView
+            android:id="@+id/tvAttachFlag"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginStart="10dp"
+            android:gravity="center"
+            android:text="BOTTOM,CENTER"
+            android:textColor="#ffffff" />
+
+        <TextView
+            android:id="@+id/tvAttach"
+            android:layout_width="100dp"
+            android:layout_height="40dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="50dp"
+            android:background="#ffffff"
+            android:gravity="center"
+            android:text="Attach"
+            android:textColor="#000000" />
+    </RelativeLayout>
 
 </FrameLayout>

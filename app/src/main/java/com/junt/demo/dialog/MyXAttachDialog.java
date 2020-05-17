@@ -4,15 +4,15 @@ import android.content.Context;
 import android.widget.TextView;
 
 import com.junt.demo.R;
-import com.junt.xdialog.core.AttachDialog;
+import com.junt.xdialog.core.XAttachDialog;
 
 import androidx.annotation.NonNull;
 
-public class MyAttachDialog extends AttachDialog {
+public class MyXAttachDialog extends XAttachDialog {
     private String text;
     private TextView textView;
 
-    public MyAttachDialog(@NonNull Context context) {
+    public MyXAttachDialog(@NonNull Context context) {
         super(context);
     }
 

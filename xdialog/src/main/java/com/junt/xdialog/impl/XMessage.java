@@ -4,9 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Point;
-import android.graphics.Rect;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.provider.Settings;
 import android.util.Log;
@@ -17,9 +14,7 @@ import android.widget.TextView;
 import com.junt.xdialog.R;
 import com.junt.xdialog.anim.XAnimator;
 import com.junt.xdialog.anim.XAnimatorAlpha;
-import com.junt.xdialog.anim.XAnimatorScale;
-import com.junt.xdialog.core.PositionDialog;
-import com.junt.xdialog.core.XCoreDialog;
+import com.junt.xdialog.core.XPositionDialog;
 import com.junt.xdialog.utils.ScreenUtils;
 
 import androidx.annotation.NonNull;
@@ -28,7 +23,7 @@ import androidx.annotation.NonNull;
  * 简易吐司不能完全替代Toast
  * 若需要全局使用则必须授予悬浮窗权限
  */
-public class XMessage extends PositionDialog {
+public class XMessage extends XPositionDialog {
 
     private boolean canGlobalShow = false;
     private int left, top;
@@ -79,8 +74,8 @@ public class XMessage extends PositionDialog {
     }
 
     @Override
-    public Drawable getBackgroundDrawable() {
-        return new ColorDrawable(Color.TRANSPARENT);
+    public int getBackgroundColor() {
+        return Color.TRANSPARENT;
     }
 
     public void setMsg(CharSequence msg) {

@@ -1,31 +1,30 @@
 package com.junt.xdialog.anim;
 
-import android.graphics.Rect;
 import android.view.View;
 
-import com.junt.xdialog.core.AttachDialog;
+import com.junt.xdialog.core.XAttachDialog;
 
 public class XAnimatorAttach extends XAnimator {
 
-    private AttachDialog.Direction direction;
+    private XAttachDialog.Direction direction;
     private View dialogView;
 
-    public void setDialogPosition(AttachDialog.Direction direction, View dialogView) {
+    public void setDialogPosition(XAttachDialog.Direction direction, View dialogView) {
         this.direction = direction;
         this.dialogView = dialogView;
     }
 
     @Override
     public void initAnim() {
-        Rect rect = new Rect();
-        dialogView.getGlobalVisibleRect(rect);
         switch (direction) {
             case LEFT:
-                getView().setPivotX(rect.width());
+                getView().setPivotX(getView().getWidth());
+                getView().setPivotY(getView().getHeight() / 2f);
                 getView().setScaleX(0);
                 break;
             case TOP:
-                getView().setPivotY(rect.height());
+                getView().setPivotY(getView().getHeight());
+                getView().setPivotX(getView().getWidth() / 2f);
                 getView().setScaleY(0);
                 break;
             case RIGHT:

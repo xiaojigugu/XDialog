@@ -183,10 +183,9 @@ xConfirmDialog.show();
 5. 设置背景色
 背景色默认为有透明度的灰色阴影,若需要需改，可在自定义的Dialog类中复写以下方法：
 ```java
-  @Override
-    public Drawable getBackgroundDrawable() {
-        //这里将背景色修改为透明背景
-        return new ColorDrawable(Color.TRANSPARENT);
+    @Override
+    public int getBackgroundColor() {
+        return Color.TRANSPARENT;
     }
 ```
 
