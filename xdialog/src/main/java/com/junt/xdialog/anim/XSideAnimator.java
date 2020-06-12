@@ -1,13 +1,12 @@
 package com.junt.xdialog.anim;
 
-import android.graphics.Point;
 import android.graphics.Rect;
 import android.view.ViewPropertyAnimator;
 
 import com.junt.xdialog.utils.ScreenUtils;
 
 public class XSideAnimator extends XAnimator {
-    private Rect rect;
+    private Rect rect = new Rect(0, 0, 0, 0);
     private Orientation orientation;
 
     public XSideAnimator(Orientation orientation) {
