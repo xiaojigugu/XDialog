@@ -38,7 +38,6 @@ public abstract class XCoreDialog extends Dialog {
     private DialogStack dialogStack;
     protected DialogContainerLayout dialogContainer;
     protected int touchSlop;
-    private boolean isShowing;
     /**
      * DialogView是否已经完成初始化（包含动画得绑定及初始化）
      */
@@ -65,7 +64,6 @@ public abstract class XCoreDialog extends Dialog {
 
     /**
      * 注册生命周期回调
-     *
      * @param context Activity
      */
     private void registerActivityLifeCallBack(@NonNull Activity context) {
@@ -175,15 +173,10 @@ public abstract class XCoreDialog extends Dialog {
     }
 
     protected void onShow() {
-        isShowing = true;
-        if (getXDialogCallBack() != null) {
-            getXDialogCallBack().onShow();
-        }
     }
 
     protected void onDismiss() {
         hide();
-        isShowing = false;
         if (getXDialogCallBack() != null) {
             getXDialogCallBack().onDismiss();
         }
@@ -194,11 +187,6 @@ public abstract class XCoreDialog extends Dialog {
         if (getXDialogCallBack() != null) {
             getXDialogCallBack().onDestroy();
         }
-    }
-
-    @Override
-    public boolean isShowing() {
-        return isShowing;
     }
 
     /**
