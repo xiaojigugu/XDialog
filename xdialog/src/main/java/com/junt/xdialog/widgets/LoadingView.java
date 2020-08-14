@@ -1,4 +1,4 @@
-package com.junt.xdialog.widgests;
+package com.junt.xdialog.widgets;
 
 import android.animation.ArgbEvaluator;
 import android.content.Context;
@@ -13,7 +13,6 @@ import com.junt.xdialog.utils.ScreenUtils;
 import androidx.annotation.Nullable;
 
 public class LoadingView extends View {
-
     private Paint paint;
     private float radius;
     private float radiusOffset;
@@ -47,13 +46,13 @@ public class LoadingView extends View {
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
-        radius = Math.min(w, h) / 2f;
+        radius = Math.min(w, h) / 2f - 5;
         radiusOffset = radius / 2f;
 
         centerX = getMeasuredWidth() / 2f;
         centerY = getMeasuredHeight() / 2f;
 
-        stokeWidth = getMeasuredWidth() * 2f / ScreenUtils.dp2px(getContext(), 10);
+        stokeWidth = getMeasuredWidth() * 2f / ScreenUtils.dp2px(getContext(), 12);
         paint.setStrokeWidth(stokeWidth);
     }
 

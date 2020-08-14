@@ -31,6 +31,9 @@ import java.util.Stack;
 
 import androidx.annotation.NonNull;
 
+/**
+ * XCoreDialog核心基类
+ */
 public abstract class XCoreDialog extends Dialog {
     protected final String TAG = getClass().getSimpleName();
     private boolean isCancelOnTouchOutSide = true;
@@ -74,6 +77,7 @@ public abstract class XCoreDialog extends Dialog {
             public void onActivityDestroyed(@NonNull Activity activity) {
                 super.onActivityDestroyed(activity);
                 if (activity == getOwnerActivity()) {
+                    dialogStack.removeDialog(XCoreDialog.this);
                     unregisterActivityLifeCallBack(activity, this);
                     onDestroy();
                 }

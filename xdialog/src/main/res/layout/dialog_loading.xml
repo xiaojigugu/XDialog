@@ -11,7 +11,7 @@
     android:orientation="vertical"
     android:padding="10dp">
 
-    <com.junt.xdialog.widgests.LoadingView
+    <com.junt.xdialog.widgets.LoadingView
         android:layout_width="30dp"
         android:layout_height="30dp" />
 
