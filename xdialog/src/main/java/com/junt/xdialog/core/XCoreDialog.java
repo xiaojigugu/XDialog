@@ -74,10 +74,20 @@ public abstract class XCoreDialog extends Dialog {
             public void onActivityDestroyed(@NonNull Activity activity) {
                 super.onActivityDestroyed(activity);
                 if (activity == getOwnerActivity()) {
+                    unregisterActivityLifeCallBack(activity, this);
                     onDestroy();
                 }
             }
         });
+    }
+
+    /**
+     * 移除生命周期回调
+     *
+     * @param context Activity
+     */
+    private void unregisterActivityLifeCallBack(@NonNull Activity context, ActivityLifeCycleCallback callback) {
+        context.getApplication().unregisterActivityLifecycleCallbacks(callback);
     }
 
     public XCoreDialog(@NonNull Context context, int themeResId) {
